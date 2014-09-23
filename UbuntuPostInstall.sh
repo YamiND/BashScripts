@@ -5,7 +5,7 @@ gsettings set com.canonical.Unity.Lenses disabled-scopes "['more_suggestions-ama
 sudo apt-get -y install vlc gimp libdvdread4 eclipse xchat socat netbeans android-tools-adb android-tools-fastboot ssh synaptic
 #sudo /usr/share/doc/libdvdread4/install-css.sh testing not having to use this part of the script
 
-sudo apt-get install ubuntu-restricted-extras
+sudo apt-get -y install ubuntu-restricted-extras
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 
 sudo add-apt-repository -y ppa:webupd8team/java
