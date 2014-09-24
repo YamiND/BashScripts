@@ -16,7 +16,7 @@ sudo apt-get -y install oracle-java7-installer
 
 sudo add-apt-repository -y ppa:linrunner/tlp #not required for desktop
 sudo apt-get update #again not required for desktop
-sudo apt-get install tlp tlp-rdw #desktop computers don't need this
+sudo apt-get -y install tlp tlp-rdw #desktop computers don't need this
 sudo tlp start #again desktop computers don't need this
 
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
