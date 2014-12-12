@@ -10,6 +10,4 @@ cd vradiant
 
 make
 
-cd install
 
-./radiant.x86

@@ -1,5 +1,5 @@
 echo "Yami's typical post-installation stuff"
-echo "By using this you auto-agree to the terms and conditions"
+echo "By using this you auto-agree to be awesome (and that stupid microsoft stuff)"
 
 gsettings set com.canonical.Unity.Lenses disabled-scopes "['more_suggestions-amazon.scope', 'more_suggestions-u1ms.scope', 'more_suggestions-populartracks.scope', 'music-musicstore.scope', 'more_suggestions-ebay.scope', 'more_suggestions-ubuntushop.scope', 'more_suggestions-skimlinks.scope']"
 
