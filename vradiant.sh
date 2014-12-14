@@ -1,13 +1,16 @@
-#script to make vradiant work might edit it in the future to actuall install on a Ubuntu system
+#!/bin/bash 
 
-sudo apt-get install git subversion g++ libgtkglext1-dev libjpeg8-dev libxml2-dev zlib1g-dev
+#script to make vradiant work
+#had to do some minor changes to make it actually compile
 
-cd ~
+sudo apt-get install git subversion g++ libgtkglext1-dev libjpeg8-dev libxml2-dev zlib1g-dev;
 
-git clone git://git.vecxis.org/vradiant.git
+git clone git://git.vecxis.org/vradiant.git ~/vradiant/;
+cd ~/vradiant/;
+mkdir tools;
+make;
+cd ~/vradiant/install/;
 
-cd vradiant
-
-make
+echo "the file to launch is called radiant.bin";
 
 
