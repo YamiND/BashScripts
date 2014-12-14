@@ -7,10 +7,8 @@ sudo apt-get install git subversion g++ libgtkglext1-dev libjpeg8-dev libxml2-de
 
 git clone git://git.vecxis.org/vradiant.git ~/vradiant/;
 cd ~/vradiant/;
-mkdir tools;
 make;
-cd ~/vradiant/install/;
 
-echo "the file to launch is called radiant.bin";
+echo "the file to launch is called radiant.bin in ~/vradiant/install/";
 
 
