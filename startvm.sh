@@ -1,6 +1,5 @@
 #!/bin/bash
-
-echo ""
+clear
 echo "This script will start a VM headless"
 echo "All you need to do is supply a name"
 echo "Windows apparently doesn't like starting headless"

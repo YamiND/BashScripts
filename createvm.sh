@@ -12,7 +12,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+clear
 echo "Easy way to create new VirtualBox VMs"
 echo "Reduces the amount of redundant typing"
 echo "This is meant for server VMs, but it should be fine"
