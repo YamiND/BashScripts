@@ -31,7 +31,7 @@ echo "6) Exit"
 echo ""
 echo ""
 
-read -p "What would you like to do? [1-5] " choice
+read -p "What would you like to do? [1-6] " choice
 case $choice in
 	1)
 	sh ./createvm.sh
@@ -43,6 +43,7 @@ case $choice in
 	sh ./vmremoteview.sh
 	;;
 	4)
+	sh ./deletevm.sh
 	;;
 	5)
 	sh ./stopvm.sh
