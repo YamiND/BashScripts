@@ -26,8 +26,8 @@ while [ $i -lt 2 ]; do
 
 echo "What would you like to do today?"
 
-echo "1) Create a Virtual Machine"
-echo "2) Start a Virtual Machine"
+echo "1) Manage Virtual Machines"
+echo "2) (UNUSED)"
 echo "3) Start a VNC Service (UNIMPLEMENTED)"
 echo "4) Restart Apache (UNIMPLEMENTED)"
 echo "5) Create a new Virtual Directory with Apache (UNIMPLEMENTED)"
@@ -40,10 +40,10 @@ echo ""
 read -p "What would you like to do? [1-7] " choice
 case $choice in
 	1)
-	sh ./createvm.sh
+	sh ./managevm.sh
 	;;
 	2)
-	sh ./startvm.sh
+	
 	;;
 	3)
 	;;
@@ -65,9 +65,11 @@ case $choice in
 esac
 
 read -p "Would you like to do anything else today? [y/n] " loop
-	 if [ "$loop" = 'n' ]
-            then
+	if [ "$loop" = 'n' ]
+        then
             i=$[ $i + 2 ]
-         fi
-clear
+    	else
+    		clear
+    fi
+
 done
