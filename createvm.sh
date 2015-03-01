@@ -158,6 +158,11 @@ while [ $i -lt 2 ]; do
 		fi
 done
 
+read -p "Would you like to mess with Remote View? [y/n] " remote
+	if [ "$remote" = 'y' ]
+			then
+		sh ./vmremoteview.sh
+	fi
 echo ""
 read -p "Do you want to start the VM now? [y/n] " start
 case $start in
