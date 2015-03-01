@@ -13,8 +13,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 clear
-
+cd VMscripts/
 i=1
+
 
 while [ $i -lt 2 ]; do
 echo "This script allows you to manage VM settings"
