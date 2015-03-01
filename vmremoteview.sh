@@ -17,14 +17,26 @@ echo "VirtualBox allows a Remote Desktop-like service for its VMs"
 echo "While insecure over a network, it is handy for a first time startup"
 echo "if the VM is not on your physical machine"
 echo ""
-
+echo ""
 read -p "What is the name of the VM? " name
 echo ""
-echo "Please enter the IP address of the host machine that the"
-echo "VM will be running on"
-echo ""
-read -p "Host OS' IP address? " ip
-read -p "Port to listen on? " port
-VBoxManage modifyvm $name --vrde on --vrdeport $port --vrdeaddress $ip
-echo ""
-echo "When you start up the VM, it should be accessible at $ip:$port "
+echo "Would you like to: "
+echo "1) Start Remote VM View"
+echo "2) Disable Remote VM View"
+read -p "Choice? [1-2]" choice
+	case $choice in 
+		1)
+		echo "Please enter the IP address of the host machine that the"
+		echo "VM will be running on"
+		echo ""
+		read -p "Host OS' IP address? " ip
+		read -p "Port to listen on? " port
+		VBoxManage modifyvm $name --vrde on --vrdeport $port --vrdeaddress $ip
+		echo ""
+		echo "If it is on, the VM should be accessible at $ip:$port "
+		;;
+		2)
+		VBoxManage modifyvm $name --vrde off
+		echo ""
+		echo "Remote view of $name should be disabled"
+		
