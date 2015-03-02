@@ -17,6 +17,17 @@
 #ACTUALLY IT SORT OF IS
 #BUT DO NO USE IT
 
+if [[ $EUID -ne 0 ]]; then
+  echo "You must be a root user" 2>&1
+  exit 1
+fi
+      clear
+      echo "This script is meant to be run once on a new system install"
+      echo "Or a system where sftp has not already been configured"
+      echo "Running this script multiple times may have undesired consequences"
+
+		read -p "What is the group name that you want for ftp users? " groupname
+			addgroup --system $groupname
 			number=`grep -n "Subsystem" /etc/ssh/sshd_config | cut -d ":" -f1`
       		sed -i '$numbers/.*/replacement-line/' /etc/ssh/sshd_config
       		echo "Subsystem sftp internal-sftp" >> /etc/ssh/sshd_config
@@ -27,3 +38,13 @@
       		echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
       		
       		serivce ssh restart
+
+      read -p "Do you wish to add a user? [y/n] " user
+      case $user in 
+            y)
+            sh ./addftpuser.sh
+            ;;
+            n)
+            ;;
+      esac
+      echo "Your sftp server should be set up!"
