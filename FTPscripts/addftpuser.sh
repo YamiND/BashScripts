@@ -81,8 +81,6 @@ case $choice in
       			chown $NAME:$groupname *
 
 			done
-        
-        else
 
 	fi
 	;;
