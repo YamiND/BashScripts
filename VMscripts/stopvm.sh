@@ -21,6 +21,9 @@ echo "./stop.sh Ubuntu  -- where Ubuntu is the name of the VM"
 echo "VMs with name spaces have issues"
 echo ""
 
+echo "Here is a list of running VMs: "
+VBoxManage list runningvms
+
 i=1
 if [ "$#" -ne 1 ]; then
 
