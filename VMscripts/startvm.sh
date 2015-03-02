@@ -23,6 +23,8 @@ echo "./startvm.sh Ubuntu  -- where Ubuntu is the name of the VM"
 echo "VMs with name spaces have issues"
 echo ""
 
+echo "Here is a list of your VMs: "
+VBoxManage list vms
 i=1
 if [ "$#" -ne 1 ]; then
 

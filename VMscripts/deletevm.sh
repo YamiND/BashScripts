@@ -17,6 +17,10 @@ echo "This script will delete a VM"
 echo "Please be careful when using this"
 echo "The script writer is not at fault for any data loss"
 echo "You have been warned"
+echo ""
+echo ""
+echo "Here is a list of VMs: "
+VBoxManage list vms
 i=1
 if [ "$#" -ne 1 ]; then
 
