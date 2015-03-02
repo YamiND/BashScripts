@@ -29,7 +29,7 @@ echo "2) Add a single user via the terminal"
 read -p "What method would you like? [1-2] " choice
 
 echo "Second, we need to assign these users to a group"
-read -p "What should the group be called? " groupname
+read -p "What is the group called? " groupname
 case $choice in
 	1)
 	echo "I need to know where the list of usernames are"
@@ -64,8 +64,8 @@ case $choice in
       		echo ""
 
       		read -p "Where shall the FTP user directories be placed? " sysdir
+
       		
-      		addgroup --system $groupname
       		for NAME in $NAMES; do
       			useradd -d $sysdir/$NAME $NAME
       			mkdir $sysdir/$NAME
