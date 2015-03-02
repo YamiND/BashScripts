@@ -64,15 +64,18 @@ case $choice in
       		echo ""
 
       		read -p "Where shall the FTP user directories be placed? " sysdir
-
-      		echo "Match Group $groupname" >> /etc/ssh/sshd_config
-      		echo "ChrootDirectory $dir/%u" >> /etc/ssh/sshd_config
-      		echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
-      		serivce ssh restart
-      		groupadd $groupname
+      		
+      		addgroup --system $groupname
       		for NAME in $NAMES; do
-      			useradd -s /usr/sbin/nologin $NAME
-				usermod -a -G $groupname $NAME
+      			useradd -d $sysdir/$NAME $NAME
+      			mkdir $sysdir/$NAME
+      			usermod -G $groupname $NAME
+      			chown root:root $sysdir/$NAME
+      			chmod 755 $sysdir/$NAME
+      			cd $sysdir/$NAME
+      			mkdir public_html
+      			chown $NAME:$groupname *
+
 			done
         
         else
