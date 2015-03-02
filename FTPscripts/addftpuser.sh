@@ -28,6 +28,8 @@ echo "2) Add a single user via the terminal"
 
 read -p "What method would you like? [1-2] " choice
 
+echo "Second, we need to assign these users to a group"
+read -p "What should the group be called? " groupname
 case $choice in
 	1)
 	echo "I need to know where the list of usernames are"
@@ -50,7 +52,7 @@ case $choice in
 	if [ "$loop" = 'y' ]
         then
         	clear
-            
+      		      
             i=$[ $i + 2 ]
       		echo "Now we need to know where our ftp users will have their main directory"
       		echo "Some common ones are:"
@@ -63,8 +65,14 @@ case $choice in
 
       		read -p "Where shall the FTP user directories be placed? " sysdir
 
+      		echo "Match Group $groupname" >> /etc/ssh/sshd_config
+      		echo "ChrootDirectory $dir/%u" >> /etc/ssh/sshd_config
+      		echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
+      		serivce ssh restart
+      		groupadd $groupname
       		for NAME in $NAMES; do
-				mkdir "$sysdir/$NAME"
+      			useradd -s /usr/sbin/nologin $NAME
+				usermod -a -G $groupname $NAME
 			done
         
         else
