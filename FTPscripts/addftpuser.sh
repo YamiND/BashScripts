@@ -11,6 +11,10 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+if [[ $EUID -ne 0 ]]; then
+  echo "You must be a root user" 2>&1
+  exit 1
+else
 
 i=1
 while [ $i -lt 2 ]; do
@@ -79,10 +83,33 @@ case $choice in
 			done
         
         else
-        	clear
+
 	fi
 	;;
 	2)
+		clear
+		read -p "What is the name of the user you wish to add?" NAME
+		echo ""
+		echo "Now we need to know where our ftp users will have their main directory"
+      	echo "Some common ones are:"
+      	echo "/var/www/ftpusers"
+      	echo "/home/useraccount/ftpusers"
+      	echo "and so forth"
+      	echo "The user will be chrooted to that directory"
+      	echo ""
+
+      		read -p "Where shall the FTP user directories be placed? " sysdir
+        	
+        		useradd -d $sysdir/$NAME $NAME
+      			mkdir $sysdir/$NAME
+      			usermod -G $groupname $NAME
+      			chown root:root $sysdir/$NAME
+      			chmod 755 $sysdir/$NAME
+      			cd $sysdir/$NAME
+      			mkdir public_html
+      			chown $NAME:$groupname *
+        	clear
 	;;
 esac
 done
+fi
