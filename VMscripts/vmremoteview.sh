@@ -43,4 +43,6 @@ read -p "Choice? [1-2] " choice
 		VBoxManage modifyvm $name --vrde off
 		echo ""
 		echo "Remote view of $name should be disabled"
+		;;
+	esac
 		
