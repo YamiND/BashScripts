@@ -27,7 +27,7 @@ while [ $i -lt 2 ]; do
 echo "What would you like to do today?"
 
 echo "1) Manage Virtual Machines"
-echo "2) (UNUSED)"
+echo "2) Manage FTP settings and servicces (Merge 6 and 7 into 2)"
 echo "3) Start a VNC Service (UNIMPLEMENTED)"
 echo "4) Restart Apache (UNIMPLEMENTED)"
 echo "5) Create a new Virtual Directory with Apache (UNIMPLEMENTED)"
