@@ -123,7 +123,7 @@ echo "1) Add/Modify a NIC"
 echo "2) I'm done here"
 
 read -p "Choose an option [1-2]: " network
-i=$network
+i=`echo $network`
 
 while [ $i -lt 2 ]; do
 	echo ""
