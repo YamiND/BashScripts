@@ -26,7 +26,9 @@ echo ""
 
 echo "1) Add a set of users from a file"
 echo "2) Add a single user via the terminal"
-
+echo ""
+echo ""
+echo "Note: If you add users from a file, each user will be assigned a random password"
 read -p "What method would you like? [1-2] " choice
 
 echo "Second, we need to assign these users to a group"
@@ -70,8 +72,9 @@ case $choice in
       		for NAME in $NAMES; do
       			useradd -d $sysdir/$NAME $NAME
       			mkdir -p $sysdir/$NAME
-            #cd $sysdir
-            #mkdir $NAME
+
+            pass=echo $[ 1 + $[ RANDOM % 10 ]]
+            echo -e "test$pass\ntest$pass" | passwd $NAME
       			usermod -G $groupname $NAME
       			chown root:root $sysdir/$NAME
       			chmod 755 $sysdir/$NAME
@@ -111,4 +114,3 @@ case $choice in
         	clear
 	;;
 esac
-done
