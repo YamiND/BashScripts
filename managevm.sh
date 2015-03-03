@@ -28,7 +28,8 @@ echo "2) Start a VM"
 echo "3) Enable/Disable Remote VM access"
 echo "4) Delete a VM"
 echo "5) Stop a VM"
-echo "6) Exit"
+echo "6) Clone a VM"
+echo "7) Exit"
 echo ""
 echo ""
 
@@ -49,7 +50,10 @@ case $choice in
 	5)
 	sh ./stopvm.sh
 	;;
-	6)
+	6
+	sh ./clonevm.sh
+	;;
+	7)
 	read -p "Are you sure you want to exit? [y/n] " loop
 	if [ "$loop" = 'y' ]
         then
