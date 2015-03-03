@@ -82,8 +82,6 @@ case $choice in
       			mkdir public_html
       			chown $NAME:$groupname *
 
-			done
-
 	fi
 	;;
 	2)
