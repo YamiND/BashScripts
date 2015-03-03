@@ -38,7 +38,7 @@ echo ""
 echo ""
 echo "Your VM should now be cloned"
 read -p "Would you like to clone another? [y/n] " repeat
-if [ "$repeat" = 'y' ]
+if [ "$repeat" = 'n' ]
         then
               i=$[ $i + 2 ]
 fi
