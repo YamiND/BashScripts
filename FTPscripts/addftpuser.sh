@@ -89,7 +89,7 @@ case $choice in
 	;;
 	2)
 		clear
-		read -p "What is the name of the user you wish to add?" NAME
+		read -p "What is the name of the user you wish to add? " NAME
 		echo ""
 		echo "Now we need to know where our ftp users will have their main directory"
       	echo "Some common ones are:"
@@ -101,14 +101,16 @@ case $choice in
 
       		read -p "Where shall the FTP user directories be placed? " sysdir
         	
-        		useradd -d $sysdir/$NAME $NAME
-      			mkdir $sysdir/$NAME
-      			usermod -G $groupname $NAME
-      			chown root:root $sysdir/$NAME
-      			chmod 755 $sysdir/$NAME
-      			cd $sysdir/$NAME
-      			mkdir public_html
-      			chown $NAME:$groupname *
+        	 useradd -d $sysdir/$NAME $NAME
+            mkdir -p $sysdir/$NAME
+            #cd $sysdir
+            #mkdir $NAME
+            usermod -G $groupname $NAME
+            chown root:root $sysdir/$NAME
+            chmod 755 $sysdir/$NAME
+            cd $sysdir/$NAME
+            mkdir public_html
+            chown $NAME:$groupname *
         	clear
 	;;
 esac
