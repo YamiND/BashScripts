@@ -30,6 +30,9 @@ read -p "Is the VM off? [y/n] " choice
 	esac
 echo ""
 echo ""
+echo "Here is a list of VMs"
+VBoxManage list vms
+
 read -p "What is the name of the VM  you wish to clone? " name
 read -p "What would you like to call the copy? " clone
 	VBoxManage clonevm $name --name $clone --register
