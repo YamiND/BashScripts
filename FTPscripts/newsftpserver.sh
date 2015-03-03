@@ -28,8 +28,9 @@ fi
 
 		read -p "What is the group name that you want for ftp users? " groupname
 			addgroup --system $groupname
-			#number=`grep -n "Subsystem" /etc/ssh/sshd_config | cut -d ":" -f1`
-      		#sed -i '$numbers/.*/replacement-line/' /etc/ssh/sshd_config
+			number=`grep -n "Subsystem" /etc/ssh/sshd_config | cut -d ":" -f1`
+      		sed -i "${number}d" /etc/ssh/sshd_config
+                  #sed -i '$numbers/.*/replacement-line/' /etc/ssh/sshd_config
       		echo "Subsystem sftp internal-sftp" >> /etc/ssh/sshd_config
       		echo "Match Group $groupname" >> /etc/ssh/sshd_config
       		echo "ChrootDirectory %h" >> /etc/ssh/sshd_config
