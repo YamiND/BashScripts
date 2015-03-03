@@ -102,9 +102,8 @@ case $choice in
         	
           mkdir -p $sysdir/$NAME
         	useradd -d $sysdir/$NAME $NAME
-            
-            #cd $sysdir
-            #mkdir $NAME
+          pass=echo $[ 1 + $[ RANDOM % 10 ]]
+          echo -e "test$pass\ntest$pass" | passwd $NAME
           usermod -G $groupname $NAME
           chown root:root $sysdir/$NAME
           chmod 755 $sysdir/$NAME
