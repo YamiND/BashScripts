@@ -37,7 +37,7 @@ fi
       		echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
       		echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
       		
-      		serivce ssh restart
+      		service ssh restart
 
       read -p "Do you wish to add a user? [y/n] " user
       case $user in 
