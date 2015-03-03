@@ -81,6 +81,7 @@ case $choice in
       			cd $sysdir/$NAME
       			mkdir public_html
       			chown $NAME:$groupname *
+            echo "test$pass"
 
 			done
 
