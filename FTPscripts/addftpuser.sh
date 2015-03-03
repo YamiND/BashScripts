@@ -16,9 +16,6 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-i=1
-while [ $i -lt 2 ]; do
-
 clear
 
 echo "This script is meant to easily add FTP user accounts"
@@ -57,7 +54,6 @@ case $choice in
         then
         	clear
       		      
-            i=$[ $i + 2 ]
       		echo "Now we need to know where our ftp users will have their main directory"
       		echo "Some common ones are:"
       		echo "/var/www/ftpusers"
