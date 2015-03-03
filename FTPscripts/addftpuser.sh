@@ -67,12 +67,15 @@ case $choice in
       		echo "This is fine since each user will be chrooted to their own directory"
       		echo ""
 
+          echo "Please use an absolute path"
       		read -p "Where shall the FTP user directories be placed? " sysdir
 
       		
       		for NAME in $NAMES; do
       			useradd -d $sysdir/$NAME $NAME
-      			mkdir $sysdir/$NAME
+      			mkdir -p $sysdir/$NAME
+            #cd $sysdir
+            #mkdir $NAME
       			usermod -G $groupname $NAME
       			chown root:root $sysdir/$NAME
       			chmod 755 $sysdir/$NAME
