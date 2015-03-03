@@ -101,16 +101,17 @@ case $choice in
 
       		read -p "Where shall the FTP user directories be placed? " sysdir
         	
-        	 useradd -d $sysdir/$NAME $NAME
-            mkdir -p $sysdir/$NAME
+          mkdir -p $sysdir/$NAME
+        	useradd -d $sysdir/$NAME $NAME
+            
             #cd $sysdir
             #mkdir $NAME
-            usermod -G $groupname $NAME
-            chown root:root $sysdir/$NAME
-            chmod 755 $sysdir/$NAME
-            cd $sysdir/$NAME
-            mkdir public_html
-            chown $NAME:$groupname *
+          usermod -G $groupname $NAME
+          chown root:root $sysdir/$NAME
+          chmod 755 $sysdir/$NAME
+          cd $sysdir/$NAME
+          mkdir public_html
+          chown $NAME:$groupname *
         	clear
 	;;
 esac
