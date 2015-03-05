@@ -23,6 +23,7 @@ fi
 
 clear
 
+echo $groupname
 echo "This script is meant to easily add FTP user accounts"
 echo "and point them to a directory"
 echo "First we need to figure out how we're adding an user(s)"
@@ -35,7 +36,7 @@ echo ""
 echo ""
 echo "Note: If you add users from a file, each user will be assigned a random password"
 read -p "What method would you like? [1-2] " choice
-if [ -z "$groupname" ]
+if [[ -z "$groupname" ]]
   then
 echo ""
 echo ""
