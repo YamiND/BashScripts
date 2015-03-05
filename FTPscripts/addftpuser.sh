@@ -37,12 +37,10 @@ echo ""
 echo ""
 echo "Note: If you add users from a file, each user will be assigned a random password"
 read -p "What method would you like? [1-2] " choice
-if [ -z "$groupname" ]; then
 echo ""
 echo ""
 echo "Second, we need to assign these users to a group"
 read -p "What is the group called? " groupname
-fi
 echo ""
 echo ""
 echo "Third, we need to decide if we're going to 'jail' our users"
@@ -92,7 +90,8 @@ case $choice in
             #pass=echo $[ 1 + $[ RANDOM % 10 ]]
             #echo -e "test$pass\ntest$pass" | passwd $NAME
       			usermod -G $groupname $NAME
-          if [ "$jail" = 'y' ]
+          if [ "$jail" = 'y' ];
+            then
       			chown root:root $sysdir/$NAME
           fi
       			chmod 755 $sysdir/$NAME
