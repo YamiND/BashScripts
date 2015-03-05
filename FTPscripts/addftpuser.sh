@@ -35,9 +35,18 @@ echo ""
 echo ""
 echo "Note: If you add users from a file, each user will be assigned a random password"
 read -p "What method would you like? [1-2] " choice
-
+if [ -z "$groupname" ];
+echo ""
+echo ""
 echo "Second, we need to assign these users to a group"
 read -p "What is the group called? " groupname
+fi
+echo ""
+echo ""
+echo "Third, we need to decide if we're going to 'jail' our users"
+echo "Jailing/Chrooting is the process of limiting our users to their own directories"
+echo ""
+read -p "Would you like to Jail/Chroot your users? [y/n] " jail
 case $choice in
 	1)
 	echo "I need to know where the list of usernames are"
@@ -78,15 +87,17 @@ case $choice in
       			useradd -d $sysdir/$NAME $NAME
       			mkdir -p $sysdir/$NAME
 
-            pass=echo $[ 1 + $[ RANDOM % 10 ]]
-            echo -e "test$pass\ntest$pass" | passwd $NAME
+            #pass=echo $[ 1 + $[ RANDOM % 10 ]]
+            #echo -e "test$pass\ntest$pass" | passwd $NAME
       			usermod -G $groupname $NAME
+          if [ "$jail" = 'y' ]
       			chown root:root $sysdir/$NAME
+          fi
       			chmod 755 $sysdir/$NAME
       			cd $sysdir/$NAME
       			mkdir public_html
       			chown $NAME:$groupname *
-            echo "test$pass"
+            #echo "test$pass"
 
 			done
 
@@ -108,10 +119,12 @@ case $choice in
         	
           mkdir -p $sysdir/$NAME
         	useradd -d $sysdir/$NAME $NAME
-          pass=echo $[ 1 + $[ RANDOM % 10 ]]
-          echo -e "test$pass\ntest$pass" | passwd $NAME
+          #pass=echo $[ 1 + $[ RANDOM % 10 ]]
+          #echo -e "test$pass\ntest$pass" | passwd $NAME
           usermod -G $groupname $NAME
-          chown root:root $sysdir/$NAME
+          if [ "$jail" = 'y' ]
+            chown root:root $sysdir/$NAME
+          fi
           chmod 755 $sysdir/$NAME
           cd $sysdir/$NAME
           mkdir public_html
