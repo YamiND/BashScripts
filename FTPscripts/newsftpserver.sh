@@ -34,7 +34,7 @@ fi
             echo ""
             echo ""
 		read -p "What is the group name that you want for ftp users? " groupname
-
+                  export groupname=`echo "$groupname"`
 			addgroup --system $groupname
 			number=`grep -n "Subsystem" /etc/ssh/sshd_config | cut -d ":" -f1`
       		sed -i "${number}d" /etc/ssh/sshd_config
@@ -66,7 +66,7 @@ fi
       read -p "Do you wish to add a user? [y/n] " user
       case $user in 
             y)
-            sh ./addftpuser.sh $groupname
+            sh ./addftpuser.sh 
             ;;
             n)
             ;;
