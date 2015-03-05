@@ -123,7 +123,8 @@ case $choice in
           #pass=echo $[ 1 + $[ RANDOM % 10 ]]
           #echo -e "test$pass\ntest$pass" | passwd $NAME
           usermod -G $groupname $NAME
-          if [ "$jail" = 'y' ]
+          if [ "$jail" = 'y' ];
+            then
             chown root:root $sysdir/$NAME
           fi
           chmod 755 $sysdir/$NAME
