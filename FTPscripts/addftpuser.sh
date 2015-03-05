@@ -22,7 +22,8 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 clear
-
+args=("$@")
+groupname=${args[1]}
 echo $groupname
 echo "This script is meant to easily add FTP user accounts"
 echo "and point them to a directory"
