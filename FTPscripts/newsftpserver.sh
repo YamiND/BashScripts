@@ -66,7 +66,7 @@ fi
       read -p "Do you wish to add a user? [y/n] " user
       case $user in 
             y)
-            sh ./addftpuser.sh $groupname
+            sh ./addftpuser.sh 
             ;;
             n)
             ;;
