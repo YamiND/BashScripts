@@ -36,7 +36,7 @@ echo ""
 echo ""
 echo "Note: If you add users from a file, each user will be assigned a random password"
 read -p "What method would you like? [1-2] " choice
-if [ -z "$groupname" ]
+if [ "$1" == "" ]; then
   then
 echo ""
 echo ""
