@@ -27,11 +27,10 @@ echo "You can add FTP users, remove FTP users, and more"
 echo ""
 echo "What would you like to do today?"
 
-echo "1) Add FTP user (UNIMPLEMENTED, although have option to input in script, or from file)"
+echo "1) Add FTP user"
 echo "2) Remove FTP user"
 echo "3) Delete FTP user directory"
-echo "4) Start FTP service"
-echo "5) Stop FTP service"
+echo "4) Setup new SFTP server"
 echo "6) Exit"
 echo ""
 echo ""
@@ -39,7 +38,7 @@ echo ""
 read -p "What would you like to do? [1-6] " choice
 case $choice in
 	1)
-	sh 
+	sh ./addftpuser.sh
 	;;
 	2)
 	sh 
@@ -48,12 +47,9 @@ case $choice in
 	sh 
 	;;
 	4)
-	
+	sh ./newftpserver.sh
 	;;
 	5)
-	
-	;;
-	6)
 	read -p "Are you sure you want to exit? [y/n] " loop
 	if [ "$loop" = 'y' ]
         then
