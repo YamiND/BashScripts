@@ -62,7 +62,8 @@ case $choice in
   echo "For simplicity, all passwords will be the same"
   echo ""
   echo ""
-  read -s "What would you like the user(s) passwords to be? " passwd
+  echo "What would you like the user(s) passwords to be? " 
+  read -s passwd
   echo "The file name and location you gave me was $dir/$file"
   echo "The password you gave me was $passwd"
 	read -p "Is this correct? [y/n] " loop
@@ -101,7 +102,8 @@ case $choice in
 		read -p "What is the name of the user you wish to add? " NAME
     echo ""
     echo ""
-    read -s "What would you like the user(s) passwords to be? " passwd
+    echo "What would you like the user(s) passwords to be? " 
+    read -s passwd
     echo "The password you gave me was $passwd"
 		echo ""
 		echo "Now we need to know where our ftp users will have their main directory"
