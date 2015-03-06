@@ -30,6 +30,7 @@ read -p "What is the group name of the FTP service you wish to remove? " groupna
 read -p "Were these users Chrooted to their own directory? [y/n] " chroot 
 case $chroot in
 		y)
+			sed -i '/Subsystem sftp internal-sftp/d' /etc/ssh/sshd_config #this won't delete, that's on purpose
       		sed -i '/Match Group $groupname/d' /etc/ssh/sshd_config
       		sed -i '/ChrootDirectory %h/d' /etc/ssh/sshd_config
       		sed -i '/X11Forwarding no/d' /etc/ssh/sshd_config
@@ -38,6 +39,7 @@ case $chroot in
       		service ssh restart
       	;;
       	n)
+			sed -i '/Subsystem sftp internal-sftp/d' /etc/ssh/sshd_config #ditto
 			sed -i '/Match Group $groupname/d' /etc/ssh/sshd_config
       		sed -i '/X11Forwarding no/d' /etc/ssh/sshd_config
       		sed -i '/AllowTcpForwarding no/d' /etc/ssh/sshd_config
@@ -49,8 +51,8 @@ read -p "Would you like to delete all users in $groupname? [y/n] " dieusers
 case $dieusers in 
 		y)
       	grep '$groupname' /etc/group | cut -d ':' -f4 | cut -d ',' -f1- --output-delimiter=$'\n' > deletedusers.txt
-
-      	NAMES="$(< deletedusers.txt)"
+      	file="deletedusers.txt"
+      	NAMES="$(< $file)"
 
       	for NAME in $NAMES; do
       			deluser --remove-home $NAME
