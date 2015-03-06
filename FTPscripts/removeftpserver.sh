@@ -58,7 +58,7 @@ case $dieusers in
       			deluser --remove-home $NAME
 			done
 
-		echo "A list of deleted users is located at $NAMES"
+		echo "A list of deleted users is located at $file"
         ;;
         n)
         ;;
