@@ -20,13 +20,11 @@ if [[ $EUID -ne 0 ]]; then
   echo "You must be a root user" 2>&1
   exit 1
 fi
-
 echo "This script is meant to easily add FTP user accounts"
 echo "and point them to a directory"
 echo "First we need to figure out how we're adding an user(s)"
 echo ""
 echo ""
-
 echo "1) Add a set of users from a file"
 echo "2) Add a single user via the terminal"
 echo ""
@@ -53,7 +51,6 @@ case $choice in
 	echo "The format of a directory looks like: "
 	echo "/home/username/Downloads"
 	echo ""
-
 	read -p "What is the directory the text file is located in? " dir
 	echo ""
 	echo "What is the file called?"
@@ -68,12 +65,10 @@ case $choice in
   read -p "What would you like the user(s) passwords to be? " passwd
   echo "The file name and location you gave me was $dir/$file"
   echo "The password you gave me was $passwd"
-
 	read -p "Is this correct? [y/n] " loop
 	if [ "$loop" = 'y' ]
         then
-        	clear
-      		      
+        	clear   
       		echo "Now we need to know where our ftp users will have their main directory"
       		echo "Some common ones are:"
       		echo "/var/www/ftpusers"
@@ -82,18 +77,12 @@ case $choice in
       		echo "Since you are inputting them from a file they will not get their own home directory"
       		echo "This is fine since each user will be chrooted to their own directory"
       		echo ""
-
           echo "Please use an absolute path"
       		read -p "Where shall the FTP user directories be placed? " sysdir
-
-      		
       		for NAME in $NAMES; do
       			useradd -d $sysdir/$NAME $NAME
             echo "$NAME:$passwd" | chpasswd
       			mkdir -p $sysdir/$NAME
-
-            #pass=echo $[ 1 + $[ RANDOM % 10 ]]
-            #echo -e "test$pass\ntest$pass" | passwd $NAME
       			usermod -G $groupname $NAME
           if [ "$jail" = 'y' ];
             then
@@ -103,8 +92,6 @@ case $choice in
       			cd $sysdir/$NAME
       			mkdir public_html
       			chown $NAME:$groupname *
-            #echo "test$pass"
-
 			done
 
 	fi
@@ -114,31 +101,31 @@ case $choice in
 		read -p "What is the name of the user you wish to add? " NAME
     echo ""
     echo ""
-    read -p "What would you like the user(s) passwords to be? " passwd
+    read -p "What would you like the user(s) passwords to be? " passwda
     echo "The password you gave me was $passwd"
 		echo ""
 		echo "Now we need to know where our ftp users will have their main directory"
-      	echo "Some common ones are:"
-      	echo "/var/www/ftpusers"
-      	echo "/home/useraccount/ftpusers"
-      	echo "and so forth"
-      	echo "The user will be chrooted to that directory"
-      	echo ""
+    echo "Some common ones are:"
+    echo "/var/www/ftpusers"
+    echo "/home/useraccount/ftpusers"
+    echo "and so forth"
+    echo "The user will be chrooted to that directory"
+    echo ""
 
-      		read -p "Where shall the FTP user directories be placed? " sysdir
-        	
-          mkdir -p $sysdir/$NAME
-        	useradd -d $sysdir/$NAME $NAME
-          echo "$NAME:$passwd" | chpasswd
-          usermod -G $groupname $NAME
-          if [ "$jail" = 'y' ];
-            then
-            chown root:root $sysdir/$NAME
-          fi
-          chmod 755 $sysdir/$NAME
-          cd $sysdir/$NAME
-          mkdir public_html
-          chown $NAME:$groupname *
-        	clear
+    read -p "Where shall the FTP user directories be placed? " sysdir
+        mkdir -p $sysdir/$NAME
+        useradd -d $sysdir/$NAME $NAME
+        echo "$NAME:$passwd" | chpasswd
+        usermod -G $groupname $NAME
+        if [ "$jail" = 'y' ];
+          then
+          chown root:root $sysdir/$NAME
+        fi
+        chmod 755 $sysdir/$NAME
+        cd $sysdir/$NAME
+        mkdir public_html
+        chown $NAME:$groupname *
+        clear
 	;;
 esac
+echo "Your FTP user(s) should be all set up!"
