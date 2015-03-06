@@ -50,7 +50,7 @@ esac
 read -p "Would you like to delete all users in $groupname? [y/n] " dieusers
 case $dieusers in 
 		y)
-      	grep '$groupname' /etc/group | cut -d ':' -f4 | cut -d ',' -f1- --output-delimiter=$'\n' > deletedusers.txt
+      	grep "$groupname" /etc/group | cut -d ':' -f4 | cut -d ',' -f1- --output-delimiter=$'\n' > deletedusers.txt
       	file="deletedusers.txt"
       	NAMES="$(< $file)"
 
