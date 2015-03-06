@@ -57,7 +57,7 @@ case $choice in
 	;;
 	2)
 	clear
-	read -p "What is the name of the FTP user you with to remove?" name
+	read -p "What is the name of the FTP user you with to remove?" NAME
 		deluser --remove-home $NAME
 	;;
 esac
