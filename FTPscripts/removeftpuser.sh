@@ -50,7 +50,7 @@ case $choice in
        	clear  
         	#echo "Please use an absolute path when selecting the delete point"
     		#read -p "Where are the FTP directories that will be deleted? " sysdir
-      		for NAME in $NAMES;
+      		for NAME in $NAMES; do
       			deluser --remove-home $NAME
 			done
 	fi
