@@ -21,10 +21,6 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-clear
-args=("$@")
-groupname=${args[0]}
-echo $groupname
 echo "This script is meant to easily add FTP user accounts"
 echo "and point them to a directory"
 echo "First we need to figure out how we're adding an user(s)"
@@ -63,8 +59,16 @@ case $choice in
 	echo "What is the file called?"
 	read -p "Please enter the full text file name: "  file
 	NAMES="$(< $dir/$file)"
+  echo ""
+  echo ""
+  echo "Now we need to set the users passwords."
+  echo "For simplicity, all passwords will be the same"
+  echo ""
+  echo ""
+  read -p "What would you like the user(s) passwords to be? " passwd
+  echo "The file name and location you gave me was $dir/$file"
+  echo "The password you gave me was $passwd"
 
-	echo "The file name and location you gave me was $dir/$file"
 	read -p "Is this correct? [y/n] " loop
 	if [ "$loop" = 'y' ]
         then
@@ -85,6 +89,7 @@ case $choice in
       		
       		for NAME in $NAMES; do
       			useradd -d $sysdir/$NAME $NAME
+            echo "$NAME:$passwd" | chpasswd
       			mkdir -p $sysdir/$NAME
 
             #pass=echo $[ 1 + $[ RANDOM % 10 ]]
@@ -107,6 +112,10 @@ case $choice in
 	2)
 		clear
 		read -p "What is the name of the user you wish to add? " NAME
+    echo ""
+    echo ""
+    read -p "What would you like the user(s) passwords to be? " passwd
+    echo "The password you gave me was $passwd"
 		echo ""
 		echo "Now we need to know where our ftp users will have their main directory"
       	echo "Some common ones are:"
@@ -120,8 +129,7 @@ case $choice in
         	
           mkdir -p $sysdir/$NAME
         	useradd -d $sysdir/$NAME $NAME
-          #pass=echo $[ 1 + $[ RANDOM % 10 ]]
-          #echo -e "test$pass\ntest$pass" | passwd $NAME
+          echo "$NAME:$passwd" | chpasswd
           usermod -G $groupname $NAME
           if [ "$jail" = 'y' ];
             then
