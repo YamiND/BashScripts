@@ -95,13 +95,19 @@ case $restrict in
       echo "What is the file called?"
       read -p "Please enter the full text file name: "  file
       NAMES="$(< $dir/$file)"
-
+      echo ""
+      echo ""
+      echo "Now we need to set the users passwords."
+      echo "For simplicity, all passwords will be the same"
+      echo ""
+      echo ""
+      read -p "What would you like the user(s) passwords to be? " passwd
       echo "The file name and location you gave me was $dir/$file"
+      echo "The password you gave me was $passwd"
       read -p "Is this correct? [y/n] " loop
       if [ "$loop" = 'y' ]
         then
-            clear
-                        
+                  clear
                   echo "Now we need to know where our ftp users will have their main directory"
                   echo "Some common ones are:"
                   echo "/var/www/ftpusers"
@@ -110,28 +116,22 @@ case $restrict in
                   echo "Since you are inputting them from a file they will not get their own home directory"
                   echo "This is fine since each user will be chrooted to their own directory"
                   echo ""
-
-          echo "Please use an absolute path"
+                  echo "Please use an absolute path"
+                  echo ""
                   read -p "Where shall the FTP user directories be placed? " sysdir
-
-                  
                   for NAME in $NAMES; do
                         useradd -d $sysdir/$NAME $NAME
+                        echo "$NAME:$passwd" | chpasswd
                         mkdir -p $sysdir/$NAME
-
-            #pass=echo $[ 1 + $[ RANDOM % 10 ]]
-            #echo -e "test$pass\ntest$pass" | passwd $NAME
                         usermod -G $groupname $NAME
-          if [ "$restrict" = 'y' ];
-            then
+            if [ "$restrict" = 'y' ];
+                  then
                         chown root:root $sysdir/$NAME
-          fi
+            fi
                         chmod 755 $sysdir/$NAME
                         cd $sysdir/$NAME
                         mkdir public_html
                         chown $NAME:$groupname *
-            #echo "test$pass"
-
                   done
 
       fi
@@ -139,6 +139,16 @@ case $restrict in
       n)
             clear
             read -p "What is the name of the user you wish to add? " NAME
+            echo "Now we need to set the users passwords."
+            echo "For simplicity, all passwords will be the same"
+            echo ""
+            echo ""
+            read -p "What would you like the user(s) passwords to be? " passwd
+            echo ""
+            read -p "The password you entered was $passwd. Is this correct? [y/n] " loop
+             read -p "Is this correct? [y/n] " loop
+      if [ "$loop" = 'y' ]
+        then
             echo ""
             echo "Now we need to know where our ftp users will have their main directory"
             echo "Some common ones are:"
@@ -147,23 +157,22 @@ case $restrict in
             echo "and so forth"
             echo "The user will be chrooted to that directory"
             echo ""
-
-                  read -p "Where shall the FTP user directories be placed? " sysdir
+            read -p "Where shall the FTP user directories be placed? " sysdir
             
-          mkdir -p $sysdir/$NAME
+            mkdir -p $sysdir/$NAME
             useradd -d $sysdir/$NAME $NAME
-          #pass=echo $[ 1 + $[ RANDOM % 10 ]]
-          #echo -e "test$pass\ntest$pass" | passwd $NAME
-          usermod -G $groupname $NAME
-          if [ "$restrict" = 'y' ];
-            then
-            chown root:root $sysdir/$NAME
-          fi
-          chmod 755 $sysdir/$NAME
-          cd $sysdir/$NAME
-          mkdir public_html
-          chown $NAME:$groupname *
+            echo "$NAME:$passwd" | chpasswd
+            usermod -G $groupname $NAME
+            if [ "$restrict" = 'y' ];
+                  then
+                  chown root:root $sysdir/$NAME
+            fi
+            chmod 755 $sysdir/$NAME
+            cd $sysdir/$NAME
+            mkdir public_html
+            chown $NAME:$groupname *
             clear
+      fi
       ;;
 esac
             ;;
