@@ -148,7 +148,6 @@ case $restrict in
             read -s passwd
             echo ""
             read -p "The password you entered was $passwd. Is this correct? [y/n] " loop
-             read -p "Is this correct? [y/n] " loop
       if [ "$loop" = 'y' ]
         then
             echo ""
