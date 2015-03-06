@@ -66,7 +66,106 @@ fi
       read -p "Do you wish to add a user? [y/n] " user
       case $user in 
             y)
-            sh ./addftpuser.sh 
+echo "First we need to figure out how we're adding an user(s)"
+echo ""
+echo ""
+
+echo "1) Add a set of users from a file"
+echo "2) Add a single user via the terminal"
+echo ""
+echo ""
+echo "Note: If you add users from a file, each user will be assigned a random password"
+echo ""
+read -p "What method would you like? [1-2] " choice
+echo ""
+echo ""
+case $restrict in
+      y)
+      echo "I need to know where the list of usernames are"
+      echo "the format you enter the username in the file will be the same way"
+      echo "their directories are named"
+      echo "Unless it is in the same directory as this script,"
+      echo "Please enter the absolute path of the directory"
+      echo "The format of a directory looks like: "
+      echo "/home/username/Downloads"
+      echo ""
+
+      read -p "What is the directory the text file is located in? " dir
+      echo ""
+      echo "What is the file called?"
+      read -p "Please enter the full text file name: "  file
+      NAMES="$(< $dir/$file)"
+
+      echo "The file name and location you gave me was $dir/$file"
+      read -p "Is this correct? [y/n] " loop
+      if [ "$loop" = 'y' ]
+        then
+            clear
+                        
+                  echo "Now we need to know where our ftp users will have their main directory"
+                  echo "Some common ones are:"
+                  echo "/var/www/ftpusers"
+                  echo "/home/useraccount/ftpusers"
+                  echo "and so forth"
+                  echo "Since you are inputting them from a file they will not get their own home directory"
+                  echo "This is fine since each user will be chrooted to their own directory"
+                  echo ""
+
+          echo "Please use an absolute path"
+                  read -p "Where shall the FTP user directories be placed? " sysdir
+
+                  
+                  for NAME in $NAMES; do
+                        useradd -d $sysdir/$NAME $NAME
+                        mkdir -p $sysdir/$NAME
+
+            #pass=echo $[ 1 + $[ RANDOM % 10 ]]
+            #echo -e "test$pass\ntest$pass" | passwd $NAME
+                        usermod -G $groupname $NAME
+          if [ "$restrict" = 'y' ];
+            then
+                        chown root:root $sysdir/$NAME
+          fi
+                        chmod 755 $sysdir/$NAME
+                        cd $sysdir/$NAME
+                        mkdir public_html
+                        chown $NAME:$groupname *
+            #echo "test$pass"
+
+                  done
+
+      fi
+      ;;
+      n)
+            clear
+            read -p "What is the name of the user you wish to add? " NAME
+            echo ""
+            echo "Now we need to know where our ftp users will have their main directory"
+            echo "Some common ones are:"
+            echo "/var/www/ftpusers"
+            echo "/home/useraccount/ftpusers"
+            echo "and so forth"
+            echo "The user will be chrooted to that directory"
+            echo ""
+
+                  read -p "Where shall the FTP user directories be placed? " sysdir
+            
+          mkdir -p $sysdir/$NAME
+            useradd -d $sysdir/$NAME $NAME
+          #pass=echo $[ 1 + $[ RANDOM % 10 ]]
+          #echo -e "test$pass\ntest$pass" | passwd $NAME
+          usermod -G $groupname $NAME
+          if [ "$restrict" = 'y' ];
+            then
+            chown root:root $sysdir/$NAME
+          fi
+          chmod 755 $sysdir/$NAME
+          cd $sysdir/$NAME
+          mkdir public_html
+          chown $NAME:$groupname *
+            clear
+      ;;
+esac
             ;;
             n)
             ;;
