@@ -48,11 +48,8 @@ case $choice in
 	if [ "$loop" = 'y' ]
         then
        	clear  
-        	#echo "Please use an absolute path when selecting the delete point"
-    		#read -p "Where are the FTP directories that will be deleted? " sysdir
       		for NAME in $NAMES; do
       			deluser --remove-home $NAME
-      			groupdel $NAME
 			done
 	fi
 	;;
@@ -60,7 +57,6 @@ case $choice in
 	clear
 	read -p "What is the name of the FTP user you with to remove? " NAME
 		deluser --remove-home $NAME
-		groupdel $NAME
 	;;
 esac
 
