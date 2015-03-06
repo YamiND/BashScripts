@@ -20,6 +20,7 @@ if [[ $EUID -ne 0 ]]; then
   echo "You must be a root user" 2>&1
   exit 1
 fi
+clear
 echo "This script is designed to remove a previously added SFTP service via my other scripts"
 echo "Please note there may be unexpected consequences, and I am not responsible for you backing up your configs"
 echo "If you want to play it safe, back up your /etc/ssh/sshd_config file"
@@ -29,18 +30,18 @@ read -p "What is the group name of the FTP service you wish to remove? " groupna
 read -p "Were these users Chrooted to their own directory? [y/n] " chroot 
 case $chroot in
 		y)
-      		sed '/Match Group $groupname/d' /etc/ssh/sshd_config
-      		sed '/ChrootDirectory %h/d' /etc/ssh/sshd_config
-      		sed '/X11Forwarding no/d' /etc/ssh/sshd_config
-      		sed '/AllowTcpForwarding no/d' /etc/ssh/sshd_config
-      		sed '/ForceCommand internal-sftp/d' /etc/ssh/sshd_config
+      		sed -i '/Match Group $groupname/d' /etc/ssh/sshd_config
+      		sed -i '/ChrootDirectory %h/d' /etc/ssh/sshd_config
+      		sed -i '/X11Forwarding no/d' /etc/ssh/sshd_config
+      		sed -i '/AllowTcpForwarding no/d' /etc/ssh/sshd_config
+      		sed -i '/ForceCommand internal-sftp/d' /etc/ssh/sshd_config
       		service ssh restart
       	;;
       	n)
-			sed '/Match Group $groupname/d' /etc/ssh/sshd_config
-      		sed '/X11Forwarding no/d' /etc/ssh/sshd_config
-      		sed '/AllowTcpForwarding no/d' /etc/ssh/sshd_config
-      		sed '/ForceCommand internal-sftp/d' /etc/ssh/sshd_config
+			sed -i '/Match Group $groupname/d' /etc/ssh/sshd_config
+      		sed -i '/X11Forwarding no/d' /etc/ssh/sshd_config
+      		sed -i '/AllowTcpForwarding no/d' /etc/ssh/sshd_config
+      		sed -i '/ForceCommand internal-sftp/d' /etc/ssh/sshd_config
       		service ssh restart
 		;;
 esac
