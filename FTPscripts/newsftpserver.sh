@@ -101,7 +101,8 @@ case $restrict in
       echo "For simplicity, all passwords will be the same"
       echo ""
       echo ""
-      read -p "What would you like the user(s) passwords to be? " passwd
+      echo "What would you like the user(s) passwords to be? " 
+      read -s passwd
       echo "The file name and location you gave me was $dir/$file"
       echo "The password you gave me was $passwd"
       read -p "Is this correct? [y/n] " loop
@@ -143,7 +144,8 @@ case $restrict in
             echo "For simplicity, all passwords will be the same"
             echo ""
             echo ""
-            read -p "What would you like the user(s) passwords to be? " passwd
+            echo "What would you like the user(s) passwords to be? " 
+            read -s passwd
             echo ""
             read -p "The password you entered was $passwd. Is this correct? [y/n] " loop
              read -p "Is this correct? [y/n] " loop
