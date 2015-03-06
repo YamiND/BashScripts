@@ -29,9 +29,9 @@ echo "What would you like to do today?"
 
 echo "1) Add FTP user"
 echo "2) Remove FTP user"
-echo "3) Delete FTP user directory"
-echo "4) Setup new SFTP server"
-echo "6) Exit"
+echo "3) Setup new SFTP server"
+echo "4) Delete SFTP server"
+echo "5) Exit"
 echo ""
 echo ""
 
@@ -41,13 +41,13 @@ case $choice in
 	sh ./addftpuser.sh
 	;;
 	2)
-	sh 
+	sh ./removeftpuser.sh 
 	;;
-	3)
-	sh 
+	3) 
+	sh ./newftpserver.sh
 	;;
 	4)
-	sh ./newftpserver.sh
+	sh ./removeftpserver.sh
 	;;
 	5)
 	read -p "Are you sure you want to exit? [y/n] " loop
