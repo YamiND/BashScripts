@@ -16,6 +16,10 @@
 #     along with this program; if not, write to the Free Software
 #     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
+if [[ $EUID -ne 0 ]]; then
+  echo "You must be a root user" 2>&1
+  exit 1
+fi
 clear
 
 echo "This script allows you to access other scripts of mine in an easy manner"
@@ -31,13 +35,11 @@ while [ $i -lt 2 ]; do
 echo "What would you like to do today?"
 
 echo "1) Manage Virtual Machines"
-echo "2) Manage FTP settings and servicces (Merge 6 and 7 into 2)"
+echo "2) Manage FTP server and settings"
 echo "3) Start a VNC Service (UNIMPLEMENTED)"
 echo "4) Restart Apache (UNIMPLEMENTED)"
 echo "5) Create a new Virtual Directory with Apache (UNIMPLEMENTED)"
-echo "6) Set up an FTP server (UNIMPLEMENTED)"
-echo "7) Add an FTP user (UNIMPLEMENTED)"
-echo "8) Exit"
+echo "6) Exit"
 echo ""
 echo ""
 
@@ -47,7 +49,7 @@ case $choice in
 	sh ./managevm.sh
 	;;
 	2)
-	
+	sh ./manageftp.sh
 	;;
 	3)
 	;;
@@ -56,10 +58,6 @@ case $choice in
 	5)
 	;;
 	6)
-	;;
-	7)
-	;;
-	8)
 	read -p "Are you sure you want to exit? [y/n] " loop
 	if [ "$loop" = 'y' ]
               then
