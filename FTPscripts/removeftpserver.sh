@@ -60,7 +60,7 @@ case $dieusers in
 
 		echo "A list of deleted users is located at $file"
 		read -p "Would you like to remove $file? [y/n] " choice
-		if [ "$choice" = 'y']
+		if [ "$choice" = 'y' ]
 			then
 			rm $file
 		fi
