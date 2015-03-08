@@ -48,7 +48,7 @@ case $choice in
 	sh ./removeftpuser.sh 
 	;;
 	3) 
-	sh ./newftpserver.sh
+	sh ./newsftpserver.sh
 	;;
 	4)
 	sh ./removeftpserver.sh
