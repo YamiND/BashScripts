@@ -28,8 +28,8 @@ fi
       echo ""
       echo ""
       echo "We can restrict users to their own directory, or give them access to the whole system"
-      read -p "Would you like to chroot/jail your users? [y/n] " restrict
-      case $restrict in 
+      read -p "Would you like to chroot/jail your users? [y/n] " jail
+      case $jail in 
             y)
             echo ""
             echo ""
@@ -101,8 +101,7 @@ case $restrict in
       echo "For simplicity, all passwords will be the same"
       echo ""
       echo ""
-      echo "What would you like the user(s) passwords to be? " 
-      read -s passwd
+      read -p "What would you like the user(s) passwords to be? " passwd
       echo "The file name and location you gave me was $dir/$file"
       echo "The password you gave me was $passwd"
       read -p "Is this correct? [y/n] " loop
@@ -121,17 +120,17 @@ case $restrict in
                   echo ""
                   read -p "Where shall the FTP user directories be placed? " sysdir
                   for NAME in $NAMES; do
+                        mkdir -p $sysdir/$NAME
                         useradd -d $sysdir/$NAME $NAME
                         echo "$NAME:$passwd" | chpasswd
-                        mkdir -p $sysdir/$NAME
                         usermod -G $groupname $NAME
-            if [ "$restrict" = 'y' ];
+            if [ "$jail" = 'y' ];
                   then
                         chown root:root $sysdir/$NAME
             fi
                         chmod 755 $sysdir/$NAME
+                        mkdir $sysdir/$NAME/public_html
                         cd $sysdir/$NAME
-                        mkdir public_html
                         chown $NAME:$groupname *
                   done
 
@@ -144,8 +143,7 @@ case $restrict in
             echo "For simplicity, all passwords will be the same"
             echo ""
             echo ""
-            echo "What would you like the user(s) passwords to be? " 
-            read -s passwd
+            read -p "What would you like the user(s) passwords to be? " passwd
             echo ""
             read -p "The password you entered was $passwd. Is this correct? [y/n] " loop
       if [ "$loop" = 'y' ]
@@ -164,13 +162,13 @@ case $restrict in
             useradd -d $sysdir/$NAME $NAME
             echo "$NAME:$passwd" | chpasswd
             usermod -G $groupname $NAME
-            if [ "$restrict" = 'y' ];
+            if [ "$jail" = 'y' ];
                   then
                   chown root:root $sysdir/$NAME
             fi
             chmod 755 $sysdir/$NAME
+            mkdir $sysdir/$NAME/public_html
             cd $sysdir/$NAME
-            mkdir public_html
             chown $NAME:$groupname *
             clear
       fi

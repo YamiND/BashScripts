@@ -62,8 +62,7 @@ case $choice in
   echo "For simplicity, all passwords will be the same"
   echo ""
   echo ""
-  echo "What would you like the user(s) passwords to be? " 
-  read -s passwd
+  read -p "What would you like the user(s) passwords to be? " passwd
   echo "The file name and location you gave me was $dir/$file"
   echo "The password you gave me was $passwd"
 	read -p "Is this correct? [y/n] " loop
@@ -81,17 +80,17 @@ case $choice in
           echo "Please use an absolute path"
       		read -p "Where shall the FTP user directories be placed? " sysdir
       		for NAME in $NAMES; do
+            mkdir -p $sysdir/$NAME
       			useradd -d $sysdir/$NAME $NAME
             echo "$NAME:$passwd" | chpasswd
-      			mkdir -p $sysdir/$NAME
       			usermod -G $groupname $NAME
           if [ "$jail" = 'y' ];
             then
       			chown root:root $sysdir/$NAME
           fi
       			chmod 755 $sysdir/$NAME
-      			cd $sysdir/$NAME
-      			mkdir public_html
+      			mkdir $sysdir/public_html
+            cd $sysdir/$NAME/public_html
       			chown $NAME:$groupname *
 			done
 
@@ -102,8 +101,7 @@ case $choice in
 		read -p "What is the name of the user you wish to add? " NAME
     echo ""
     echo ""
-    echo "What would you like the user(s) passwords to be? " 
-    read -s passwd
+    read -p "What would you like the user(s) passwords to be? " passwd
     echo "The password you gave me was $passwd"
 		echo ""
 		echo "Now we need to know where our ftp users will have their main directory"
@@ -124,8 +122,8 @@ case $choice in
           chown root:root $sysdir/$NAME
         fi
         chmod 755 $sysdir/$NAME
-        cd $sysdir/$NAME
         mkdir public_html
+        cd $sysdir/$NAME/public_html
         chown $NAME:$groupname *
         clear
 	;;
