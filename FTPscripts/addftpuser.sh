@@ -89,7 +89,7 @@ case $choice in
       			chown root:root $sysdir/$NAME
           fi
       			chmod 755 $sysdir/$NAME
-      			mkdir $sysdir/public_html
+      			mkdir $sysdir/$NAME/public_html
             cd $sysdir/$NAME/public_html
       			chown $NAME:$groupname *
 			done
