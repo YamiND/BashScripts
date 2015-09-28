@@ -36,7 +36,7 @@ echo "What would you like to do today?"
 
 echo "1) Manage Virtual Machines"
 echo "2) Manage FTP server and settings"
-echo "3) Start a VNC Service (UNIMPLEMENTED)"
+echo "3) Manage Backups"
 echo "4) Restart Apache (UNIMPLEMENTED)"
 echo "5) Create a new Virtual Directory with Apache (UNIMPLEMENTED)"
 echo "6) Exit"
@@ -52,6 +52,7 @@ case $choice in
 	sh ./manageftp.sh
 	;;
 	3)
+	sh ./managebackup.sh
 	;;
 	4)
 	;;
