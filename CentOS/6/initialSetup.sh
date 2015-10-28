@@ -58,3 +58,8 @@ sed -i '/PermitRootLogin yes/c\PermitRootLogin no' /etc/ssh/sshd_config
 
 yum -y upgrade
 
+
+# TODO:
+# Start the Script that will iterate through the system binary locations and run an md5sum on all packages
+# Change the default port of SSH
+
