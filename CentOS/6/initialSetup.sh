@@ -24,14 +24,6 @@ gpasswd -a $User wheel
 
 yum -y update
 
-# Copy the MariaDB repository information which we will need since the default mysql is out of date
-
-cp MariaDB55.repo /etc/yum.repos.d/MariaDB55.repo
-
-# Install MariaDB
-
-yum -y install mysql-server mysql
-
 # Enable the extra repository (required for packages like htop)
 
 sudo -y yum install epel-release
