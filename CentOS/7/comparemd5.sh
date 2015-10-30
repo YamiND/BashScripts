@@ -1,7 +1,7 @@
 #!/bin/bash
 
 inputfile=binaryver.csv
-badmd5file=badmd5.txt
+badmd5file=badmd5.csv
 matchmd5file=matchmd5.txt
 searchfile=version.txt
 
@@ -16,12 +16,11 @@ while read line; do
 	if [ "$currmd5" == "$imagemd5" ]; then
 		echo "$binaryprog matches md5" >> $matchmd5file
 	else
-		echo "$binaryprog does not match" >> $badmd5file
 		# Yes this script assumes ls and awk are not screwed with
 		# Then again, if you have a miss matching md5 you have reason to worry
 		# So if you want reliability, change the script to use an external drive's
 		# version of the programs
 		badinfo=$(ls -al $binaryprog | awk '// {print $5 "," $6 "," $7}')
-		echo "$binaryprog info: $badinfo" >> $badmd5file
+		echo "$binaryprog does not match,  $badinfo" >> $badmd5file
 	fi
  done < $inputfile
