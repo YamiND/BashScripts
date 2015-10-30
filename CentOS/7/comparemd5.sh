@@ -21,6 +21,6 @@ while read line; do
 		# So if you want reliability, change the script to use an external drive's
 		# version of the programs
 		badinfo=$(ls -al $binaryprog | awk '// {print $5 "," $6 "," $7}')
-		echo "$binaryprog does not match,  $badinfo" >> $badmd5file
+		echo "$binaryprog does not match, $currmd5, $badinfo" >> $badmd5file
 	fi
  done < $inputfile
