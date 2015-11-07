@@ -2,8 +2,16 @@
 
 #########################################
 # Please Read:                          #
+#             				#
 # This script assumes the files are in  #
 # the root home directory               #
+# 					#
+# This script also assumes networking   #
+# has been configured correctly         # 
+# 					#
+# This script also assumes the site     #
+# is for HTTPS with the certs           #
+# commercial.cert and commercial.key    #
 #########################################
 
 
@@ -42,6 +50,12 @@ git clone https://github.com/YamiND/LTI_Centric_v2.git
 
 mv ./LTI_Centric_v2/* /var/www/html/
 
+#########################################
+# Change Ownerships and set Permissions #
+#########################################
+
+chown -R apache:apache /var/www/html
+chmod -R 555 /var/www/html
 
 #############################################################
 # Add an exception to SELinux to allow php files to be run  #
@@ -77,6 +91,7 @@ cp ~/commercial.key /etc/pki/tls/private/commercial.crt
 
 ############################################
 # Add exception to the firewall and reload #
+# This should open the HTTPS port          #
 ############################################
 
 firewall-cmd --permanent --add-port=443/tcp
