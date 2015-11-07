@@ -1,57 +1,47 @@
 #!/bin/bash
 
+#################################################################
+# Please read:							# 
+# This script assumes the networking is set up.			# 
+# If it is not, please see the documentation on at:		#
+# https://github.com/YamiND/BashScripts/CentOS/7/Documentation  #
+#################################################################
+
 if [[ $EUID -ne 0 ]]; then
   echo "You must be a root user" 2>&1
   exit 1
 fi
 
-#Set user account to create and assign a password
-
-User=""
-passwd=""
-
-#Add the user
-
-adduser $User
-echo "$User:$passwd" | chpasswd
-
-# Give the user sudo access
-
-gpasswd -a $User wheel
-
-# Update the repositories and system
-# This script assumes the networking is set up. This also includes the proper bridging interfaces for LXC
+#########################
+# Update/Upgrade System #
+#########################
 
 yum -y update
+yum -y upgrade
 
-# Enable the extra repository (required for packages like htop)
+#######################
+# Enable Repositories # 
+#######################
 
 sudo -y yum install epel-release
 
-# Install some basic utilities
+###########################
+# Install Basic Utilities #
+###########################
 
-yum -y install htop
+yum -y install htop policycoreutils-python git
 
-# Install libvirt requirements
 
-yum -y install libvirt libvirt-client 
-
-# Install LXC and dependencies
-
-yum -y install lxc lxc-templates lxc-extra wget
-
-# Install OpenSSH Server, and fix the damn defaults
+########################################
+# Install OpenSSH Server and Configure #
+########################################
 
 yum -y install openssh-server
 sed -i '/PermitRootLogin yes/c\PermitRootLogin no' /etc/ssh/sshd_config
 
 
-# Last thing, remove obsolete packages (and hope this doesn't break something)
+##################
+# Installing KVM #
+##################
 
-yum -y upgrade
-
-
-# TODO:
-# Start the Script that will iterate through the system binary locations and run an md5sum on all packages
-# Change the default port of SSH
-
+yum -y install kvm qemu-kvm python-virtinst libvirt libvirt-python libguestfs-tools
