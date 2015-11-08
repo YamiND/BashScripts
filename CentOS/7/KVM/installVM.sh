@@ -30,7 +30,7 @@ do
 	      VM RAM: $vmRAM
 	      VM Space: $vmSpace
 	      VM CPUs: $vmCPUs
-	      VM Graphics: $vm Graphics
+	      VM Graphics: $vmGraphics
               Location of ISO: $vmISO
  	      Network Interface: $vmNetwork "
 
@@ -58,4 +58,4 @@ virt-install \
 --cdrom $vmISO \
 --network bridge:$vmNetwork
 
-
+echo "You can now access this VM by connecting to the server via VNC"
