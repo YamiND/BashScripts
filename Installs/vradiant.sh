@@ -7,6 +7,7 @@
 #			        #
 # Ubuntu 14.04 		        #
 # Ubuntu 15.10		        #
+# Linux Mint 17			#
 #			        #
 # TODO:				# 
 # Install vradiant to the 	#
