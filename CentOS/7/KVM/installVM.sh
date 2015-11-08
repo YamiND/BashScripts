@@ -2,8 +2,7 @@
 
 #################################################
 # Please read:                                  #
-# This script might not need to be run		# 
-# as root.					# 
+# This script will install a VM 		# 
 # 						#
 # Please consult the Documentation or man page  #
 # if you have any difficulties			#

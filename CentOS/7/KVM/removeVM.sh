@@ -4,7 +4,7 @@
 # Please Read: 						    #
 #							    # 
 # This script assumes the images are of the extension .img  #
-#							    #
+# This script will remove a VM and delete it		    #
 ############################################################# 
 
 if [[ $EUID -ne 0 ]]; then
