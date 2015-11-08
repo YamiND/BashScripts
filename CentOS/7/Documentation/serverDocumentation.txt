@@ -86,9 +86,14 @@ nameserver 8.8.8.8
 nameserver 8.8.4.4
 
 
-#################
-# 2. SSH Setup  #
-#################
+
+############################
+# 2. SELinux Configuration #
+############################
+
+###############################
+# 2.1 Installing Dependencies #
+###############################
 
 ##################################################
 # You will need the policy utils package for     #
@@ -100,8 +105,13 @@ nameserver 8.8.4.4
 yum -y install policycoreutils-python
 
 
+#################
+# 3. SSH Setup  #
+#################
+
+
 ##########################
-# 2.1 SSHD Configuration #
+# 3.1 SSHD Configuration #
 ##########################
 
 Port 1069
@@ -141,7 +151,7 @@ Subsystem       sftp    /usr/libexec/openssh/sftp-server
 
 
 #########################################
-# 2.2 iptables rules for SSH (UNTESTED) #
+# 3.2 iptables rules for SSH (UNTESTED) #
 #########################################
 
 iptables -N SSHLOCK
@@ -155,12 +165,12 @@ iptables -A INPUT -i em1 -p tcp -m state --dport 1069 --state NEW -m recent --up
 
 
 ###############
-# 3. KVM/QEMU #
+# 4. KVM/QEMU #
 ###############
 
 
 ##################################
-# 3.1 Installing and Configuring #
+# 4.1 Installing and Configuring #
 ##################################
 
 
@@ -190,7 +200,7 @@ vnc_password = "passwordHere"
 
 
 ##################################
-# 3.2 Creating a Virtual Machine #
+# 4.2 Creating a Virtual Machine #
 ##################################
 
 ########################################################
@@ -227,7 +237,7 @@ virt-install \
 --network bridge:br0 
 
 ################################
-# 3.3 Remove a Virtual Machine #
+# 4.3 Remove a Virtual Machine #
 ################################
 
 ######################################################
@@ -241,12 +251,6 @@ virt-install \
 virsh destroy LTI_Test
 virsh undefine LTI_Test
 virsh vol-delete --pool default LTI_Test.img
-
-
-
-
-
-
 
 
 
