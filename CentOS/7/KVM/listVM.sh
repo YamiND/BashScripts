@@ -4,4 +4,4 @@
 # This script will list all VMs #
 #################################
 
-virsh list
+sudo virsh list --all
