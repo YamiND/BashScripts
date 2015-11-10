@@ -46,7 +46,7 @@ done
 
 vmLocation="/var/lib/libvirt/images/$vmName.img,bus=virtio,size=$vmSpace"
 
-virt-install \
+sudo virt-install \
 -n $vmName \
 --description "$vmDescription" \
 --os-type=$vmOStype \

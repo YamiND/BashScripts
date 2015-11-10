@@ -6,4 +6,4 @@
 
 read -p "What is the name of the VM? " vmName
 
-virsh shutdown $vmName
+sudo virsh shutdown $vmName

@@ -6,6 +6,6 @@
 
 read -p "What is the name of the VM? " vmName
 
-virsh destroy $vmName
+sudo virsh destroy $vmName
 
 

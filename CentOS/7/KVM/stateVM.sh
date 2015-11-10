@@ -6,4 +6,4 @@
 
 read -p "What is the name of the VM? " vmName
 
-virsh domname $vmName
+sudo virsh domname $vmName
