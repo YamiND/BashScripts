@@ -20,7 +20,7 @@ do
 	read -p "Graphics Type (vnc, none, etc): " vmGraphics
 	read -p "Location and name of bootable iso: " vmISO
 	read -p "Name of network Bridge: " vmNetwork
-
+	read -p "Do you want to auto start the VM at boot? [y/n]" vmAutoStart
 	echo "The information for this VM is:\n
 	      VM Name: $vmName
 	      VM Description: $vmDescription
@@ -31,7 +31,8 @@ do
 	      VM CPUs: $vmCPUs
 	      VM Graphics: $vmGraphics
               Location of ISO: $vmISO
- 	      Network Interface: $vmNetwork "
+ 	      Network Interface: $vmNetwork
+	      Auto Start VM: $vmAutoStart "
 
 	read -p "Is this information correct? [y/n] " vmInfo
 	
@@ -56,5 +57,13 @@ virt-install \
 --graphics $vmGraphics \
 --cdrom $vmISO \
 --network bridge:$vmNetwork
+
+case $vmAutoStart in
+
+	y)
+	virsh autostart $vmName
+	;;
+esac
+
 
 echo "You can now access this VM by connecting to the server via VNC"
