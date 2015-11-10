@@ -73,6 +73,12 @@ cp /etc/httpd/conf/httpd.conf $tempDir/configBackup/httpd.conf.backup
 sed -i '/upload_max_filesize/c\upload_max_filesize = 20M' /etc/php.ini
 sed -i '/post_max_size/c\post_max_size = 20M' /etc/php.ini
 
+############
+# Hide PHP #
+############
+
+sed -i '/expose_php/c\expose_php = off' /etc/php.ini
+
 #############################
 # Remove the welcome screen #
 #############################
