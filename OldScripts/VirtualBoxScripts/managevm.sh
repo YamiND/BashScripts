@@ -20,7 +20,6 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 clear
-cd VMscripts/
 i=1
 
 
@@ -57,7 +56,7 @@ case $choice in
 	5)
 	sh ./stopvm.sh
 	;;
-	6
+	6)
 	sh ./clonevm.sh
 	;;
 	7)

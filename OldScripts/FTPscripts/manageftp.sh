@@ -21,7 +21,6 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 clear
-cd FTPscripts/
 i=1
 
 
