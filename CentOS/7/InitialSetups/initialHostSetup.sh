@@ -48,9 +48,20 @@ sudo yum -y install kvm qemu-kvm python-virtinst libvirt libvirt-python libguest
 
 sudo chkconfig libvirtd on
 
+##########################
+# Enable IPv4 Forwarding #
+##########################
+
+echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+
 ########################
 # Disable ICMP Replies #
-#######################
+########################
 
 echo "net.ipv4.icmp_echo_ignore_all = 1" >> /etc/sysctl.conf
+
+######################
+# Reload sysctl conf #
+######################
+
 sysctl -p
