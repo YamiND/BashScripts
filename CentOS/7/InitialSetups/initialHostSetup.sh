@@ -47,3 +47,10 @@ sudo yum -y install kvm qemu-kvm python-virtinst libvirt libvirt-python libguest
 #####################
 
 sudo chkconfig libvirtd on
+
+########################
+# Disable ICMP Replies #
+#######################
+
+echo "net.ipv4.icmp_echo_ignore_all = 1" >> /etc/sysctl.conf
+sysctl -p
