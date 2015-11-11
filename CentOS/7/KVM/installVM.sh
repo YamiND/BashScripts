@@ -21,7 +21,7 @@ do
 	read -p "Location and name of bootable iso: " vmISO
 	read -p "Name of network Bridge: " vmNetwork
 	read -p "Do you want to auto start the VM at boot? [y/n] " vmAutoStart
-	echo "The information for this VM is:\n
+	echo -e "The information for this VM is:\n
 	      VM Name: $vmName
 	      VM Description: $vmDescription
 	      VM OS Type: $vmOStype
