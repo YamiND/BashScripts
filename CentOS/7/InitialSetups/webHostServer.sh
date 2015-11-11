@@ -31,6 +31,12 @@ mkdir $tempDir/configBackup
 
 yum install mariadb-server
 
+###################
+# Restart MariaDB #
+###################
+
+systemctl restart mariadb
+
 #####################
 # Configure MariaDB #
 #####################
