@@ -29,7 +29,7 @@ mkdir $tempDir/configBackup
 # Install MariaDB #
 ###################
 
-yum install mariadb-server
+yum -y install mariadb-server
 
 ###################
 # Restart MariaDB #
