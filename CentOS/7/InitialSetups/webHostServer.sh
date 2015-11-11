@@ -47,7 +47,7 @@ mysql_secure_installation
 # Start MariaDB on startup #
 ############################
 
-systemctl enable mariadb.service
+systemctl enable mariadb
 
 ###########################
 # Restore tables from SQL #
@@ -61,9 +61,11 @@ mysql -u root -p < $tempDir/mysql/backup.sql
 # php                             #
 # SElinux policy utils            #
 # git                             #
+# php-gd			  #
+# php-mysql connector		  #
 ###################################
 
-yum -y install httpd php policycoreutils-python git
+yum -y install httpd php policycoreutils-python git php-gd php-mysql
 
 ####################################
 # Create copy of important configs #
