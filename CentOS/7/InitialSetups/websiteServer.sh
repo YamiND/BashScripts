@@ -88,6 +88,11 @@ cp ~/ssl.conf /etc/httpd/conf.d/
 cp ~/commercial.crt /etc/pki/tls/certs/commercial.crt
 cp ~/commercial.key /etc/pki/tls/private/commercial.crt
 
+#######################
+# SELinux allow certs #
+#######################
+
+restorecon -RvF /etc/pki
 
 ############################################
 # Add exception to the firewall and reload #
