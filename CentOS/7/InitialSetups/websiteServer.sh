@@ -25,6 +25,64 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 
+########################
+# INITIAL SERVER SETUP #
+########################
+
+#########################
+# Update/Upgrade System #
+#########################
+
+sudo yum -y update
+sudo yum -y upgrade
+
+#######################
+# Enable Repositories # 
+#######################
+
+sudo yum -y install epel-release
+
+###########################
+# Install Basic Utilities #
+###########################
+
+sudo yum -y install htop policycoreutils-python git wget
+
+########################################
+# Install OpenSSH Server and Configure #
+########################################
+
+sudo yum -y install openssh-server
+cp /etc/ssh/sshd_config ~/sshd_config.backup
+sudo sed -i '/PermitRootLogin yes/c\PermitRootLogin no' /etc/ssh/sshd_config
+sudo sed -i '/#Port 25/c\Port 1069' /etc/ssh/sshd_config 
+
+##########################################
+# Configure SELinux and Firewall for SSH #
+##########################################
+
+sudo semanage port -a -t ssh_port_t -p tcp 1069
+
+sudo firewall-cmd --permanent --add-port=1069/tcp
+sudo firewall-cmd --reload
+
+########################
+# Disable ICMP Replies #
+########################
+
+sudo echo "net.ipv4.icmp_echo_ignore_all = 1" >> /etc/sysctl.conf
+
+######################
+# Reload sysctl conf #
+######################
+
+sudo sysctl -p
+
+
+##########################
+# WEB SERVER SETUP BELOW #
+##########################
+
 ###################################
 # Install the following packages: #
 # Apache                          #
@@ -34,8 +92,7 @@ fi
 # git                             #
 ###################################
 
-yum -y install httpd php mod_ssl policycoreutils-python git
-
+sudo yum -y install httpd php mod_ssl policycoreutils-python git
 
 ########################
 # Clone the repository #
@@ -43,64 +100,63 @@ yum -y install httpd php mod_ssl policycoreutils-python git
 
 git clone https://github.com/YamiND/LTI_Centric_v2.git
 
-
 #########################
 # Move the cloned files #
 #########################
 
-mv ./LTI_Centric_v2/* /var/www/html/
+sudo mv ./LTI_Centric_v2/* /var/www/html/
 
 #########################################
 # Change Ownerships and set Permissions #
 #########################################
 
-chown -R apache:apache /var/www/html
-chmod -R 555 /var/www/html
+sudo chown -R apache:apache /var/www/html
+sudo chmod -R 555 /var/www/html
 
 #############################################################
 # Add an exception to SELinux to allow php files to be run  #
 # Any files within that directory (should be document root) #
 #############################################################
 
-semanage fcontext -a -t httpd_sys_script_exec_t '/var/www/html(/.*)?'
-restorecon -R -v /var/www/html/
+sudo semanage fcontext -a -t httpd_sys_script_exec_t '/var/www/html(/.*)?'
+sudo restorecon -R -v /var/www/html/
 
 
 #############################
 # Remove the welcome screen #
 #############################
 
-rm -f /etc/httpd/conf.d/welcome.conf
+sudo rm -f /etc/httpd/conf.d/welcome.conf
 
 
 #####################
 # Copy config files #
 #####################
 
-cp ~/httpd.conf /etc/httpd/conf/
-cp ~/ssl.conf /etc/httpd/conf.d/
+sudo cp ~/httpd.conf /etc/httpd/conf/
+sudo cp ~/ssl.conf /etc/httpd/conf.d/
 
 
 ##########################
 # Copy Certificate files #
 ##########################
 
-cp ~/commercial.crt /etc/pki/tls/certs/commercial.crt
-cp ~/commercial.key /etc/pki/tls/private/commercial.crt
+sudo cp ~/commercial.crt /etc/pki/tls/certs/commercial.crt
+sudo cp ~/commercial.key /etc/pki/tls/private/commercial.crt
 
 #######################
 # SELinux allow certs #
 #######################
 
-restorecon -RvF /etc/pki
+sudo restorecon -RvF /etc/pki
 
 ############################################
 # Add exception to the firewall and reload #
 # This should open the HTTPS port          #
 ############################################
 
-firewall-cmd --permanent --add-port=443/tcp
-firewall-cmd --reload
+sudo firewall-cmd --permanent --add-port=443/tcp
+sudo firewall-cmd --reload
 
 
 ##############################################
