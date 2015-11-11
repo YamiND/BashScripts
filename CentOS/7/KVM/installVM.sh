@@ -33,6 +33,7 @@ do
               Location of ISO: $vmISO
  	      Network Interface: $vmNetwork
 	      Auto Start VM: $vmAutoStart "
+	echo ""
 
 	read -p "Is this information correct? [y/n] " vmInfo
 	
