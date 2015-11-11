@@ -18,7 +18,13 @@ sudo yum -y upgrade
 # Enable Repositories # 
 #######################
 
-sudo -y yum install epel-release
+sudo yum -y install epel-release
+
+#################################
+# Install packages for bridging #
+#################################
+
+sudo yum -y install bridge-utils
 
 ###########################
 # Install Basic Utilities #
@@ -48,7 +54,7 @@ sudo firewall-cmd --reload
 # Installing KVM #
 ##################
 
-sudo yum -y install kvm qemu-kvm python-virtinst libvirt libvirt-python libguestfs-tools
+sudo yum -y install kvm qemu-kvm python-virtinst libvirt libvirt-python libguestfs-tools virt-install
 
 #####################
 # Enabling libvirtd #
