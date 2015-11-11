@@ -33,8 +33,16 @@ sudo yum -y install htop policycoreutils-python git
 sudo yum -y install openssh-server
 sudo cp /etc/ssh/sshd_config ~/sshd_config.backup
 sudo sed -i '/PermitRootLogin yes/c\PermitRootLogin no' /etc/ssh/sshd_config
+sudo sed -i '/#Port 25/c\Port 1069' /etc/ssh/sshd_config 
 
-# If SSHD does not autoenable: sudo systemctl enable sshd.service
+##########################################
+# Configure SELinux and Firewall for SSH #
+##########################################
+
+sudo semanage port -a -t ssh_port_t -p tcp 1069
+
+sudo firewall-cmd --permanent --add-port=1069/tcp
+sudo firewall-cmd --reload
 
 ##################
 # Installing KVM #
@@ -52,16 +60,16 @@ sudo chkconfig libvirtd on
 # Enable IPv4 Forwarding #
 ##########################
 
-echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+sudo echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
 
 ########################
 # Disable ICMP Replies #
 ########################
 
-echo "net.ipv4.icmp_echo_ignore_all = 1" >> /etc/sysctl.conf
+sudo echo "net.ipv4.icmp_echo_ignore_all = 1" >> /etc/sysctl.conf
 
 ######################
 # Reload sysctl conf #
 ######################
 
-sysctl -p
+sudo sysctl -p
