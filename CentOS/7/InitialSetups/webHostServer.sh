@@ -12,42 +12,88 @@
 # Examples			     #
 ######################################
 
-
-###############################
-# Require this be run as root #
-###############################
-
-if [[ $EUID -ne 0 ]]; then
-  echo "You must be a root user" 2>&1
-  exit 1
-fi
-
 tempDir=~/temp
 mkdir $tempDir/configBackup
+
+########################
+# INITIAL SERVER SETUP #
+########################
+
+#########################
+# Update/Upgrade System #
+#########################
+
+sudo yum -y update
+
+#######################
+# Enable Repositories # 
+#######################
+
+sudo yum -y install epel-release
+
+###########################
+# Install Basic Utilities #
+###########################
+
+sudo yum -y install htop policycoreutils-python git wget
+
+########################################
+# Install OpenSSH Server and Configure #
+########################################
+
+sudo yum -y install openssh-server
+cp /etc/ssh/sshd_config ~/sshd_config.backup
+sudo sed -i '/PermitRootLogin yes/c\PermitRootLogin no' /etc/ssh/sshd_config
+sudo sed -i '/#Port 25/c\Port 1069' /etc/ssh/sshd_config 
+
+##########################################
+# Configure SELinux and Firewall for SSH #
+##########################################
+
+sudo semanage port -a -t ssh_port_t -p tcp 1069
+
+sudo firewall-cmd --permanent --add-port=1069/tcp
+sudo firewall-cmd --reload
+
+########################
+# Disable ICMP Replies #
+########################
+
+sudo echo "net.ipv4.icmp_echo_ignore_all = 1" >> /etc/sysctl.conf
+
+######################
+# Reload sysctl conf #
+######################
+
+sudo sysctl -p
+
+##################
+# WEB HOST SETUP #
+##################
 
 ###################
 # Install MariaDB #
 ###################
 
-yum -y install mariadb-server
+sudo yum -y install mariadb-server
 
 ###################
 # Restart MariaDB #
 ###################
 
-systemctl restart mariadb
+sudo systemctl restart mariadb
 
 #####################
 # Configure MariaDB #
 #####################
 
-mysql_secure_installation
+sudo mysql_secure_installation
 
 ############################
 # Start MariaDB on startup #
 ############################
 
-systemctl enable mariadb
+sudo systemctl enable mariadb
 
 ###########################
 # Restore tables from SQL #
@@ -65,7 +111,7 @@ mysql -u root -p < $tempDir/mysql/backup.sql
 # php-mysql connector		  #
 ###################################
 
-yum -y install httpd php policycoreutils-python git php-gd php-mysql
+sudo yum -y install httpd php php-gd php-mysql
 
 ####################################
 # Create copy of important configs #
@@ -78,82 +124,66 @@ cp /etc/httpd/conf/httpd.conf $tempDir/configBackup/httpd.conf.backup
 # Change PHP's max upload size #
 ################################
 
-sed -i '/upload_max_filesize/c\upload_max_filesize = 20M' /etc/php.ini
-sed -i '/post_max_size/c\post_max_size = 20M' /etc/php.ini
+sudo sed -i '/upload_max_filesize/c\upload_max_filesize = 20M' /etc/php.ini
+sudo sed -i '/post_max_size/c\post_max_size = 20M' /etc/php.ini
 
 ############
 # Hide PHP #
 ############
 
-sed -i '/expose_php/c\expose_php = off' /etc/php.ini
+sudo sed -i '/expose_php/c\expose_php = off' /etc/php.ini
 
 #############################
 # Remove the welcome screen #
 #############################
 
-rm -f /etc/httpd/conf.d/welcome.conf
-
-#################################
-# Create the directories for    #
-# VirtualHost configuration     #
-# files				#
-#################################
-
-mkdir /etc/httpd/sites-available
-mkdir /etc/httpd/sites-enabled
-
-##################################
-# Add VirtualHost config line to #
-# httpd.conf			 #
-##################################
-
-echo "IncludeOptional sites-enabled/*.conf" >> /etc/httpd/conf/httpd.conf
+sudo rm -f /etc/httpd/conf.d/welcome.conf
 
 ####################################
 # Copy VirtualHost config files to #
-# /etc/httpd/sites-available and   #
-# symlink them to sites-enabled    #
+# /etc/httpd/conf/httpd.conf   	   #
 ####################################
 
-cp $tempDir/apache/sites-available/ /etc/httpd/sites-available
-ln -s /etc/httpd/sites-available/* /etc/httpd/sites-enabled
+for file in $tempDir/apache/*;
+do
+	sudo echo "$(cat $file)" >> /etc/httpd/conf/httpd.conf
+done
 
 ############################################
 # Copy client directories to /var/www/html #
 ############################################
 
-cp -R $tempDir/www/* /var/www/html/
+sudo cp -R $tempDir/www/* /var/www/html/
 
 #########################################
 # Change Ownerships and set Permissions #
 # Wordpress is finicky			#
 #########################################
 
-chown -R apache:apache /var/www/html
+sudo chown -R apache:apache /var/www/html
 
-find /var/www/html/ -type f -exec chmod 664 {} \;
-find /var/www/html/ -type d -exec chmod 775 {} \;
+sudo find /var/www/html/ -type f -exec chmod 664 {} \;
+sudo find /var/www/html/ -type d -exec chmod 775 {} \;
 
 #############################################################
 # Add an exception to SELinux to allow php files to be run  #
 # Any files within that directory (should be document root) #
 #############################################################
 
-semanage fcontext -a -t httpd_sys_script_exec_t '/var/www/html(/.*)?'
-restorecon -R -v /var/www/html/
+sudo semanage fcontext -a -t httpd_sys_script_exec_t '/var/www/html(/.*)?'
+sudo restorecon -R -v /var/www/html/
 
 ############################################
 # Add exception to the firewall and reload #
 # This should open the HTTPS port          #
 ############################################
 
-firewall-cmd --permanent --add-port=80/tcp
-firewall-cmd --reload
-
+sudo firewall-cmd --permanent --add-port=80/tcp
+sudo firewall-cmd --reload
 
 ##############################################
 # Start the httpd service and enable at boot #
 ##############################################
 
-systemctl start httpd 
-systemctl enable httpd 
+sudo systemctl start httpd 
+sudo systemctl enable httpd 
