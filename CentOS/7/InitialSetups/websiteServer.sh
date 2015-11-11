@@ -14,17 +14,6 @@
 # commercial.cert and commercial.key    #
 #########################################
 
-
-###############################
-# Require this be run as root #
-###############################
-
-if [[ $EUID -ne 0 ]]; then
-  echo "You must be a root user" 2>&1
-  exit 1
-fi
-
-
 ########################
 # INITIAL SERVER SETUP #
 ########################
@@ -78,7 +67,6 @@ sudo echo "net.ipv4.icmp_echo_ignore_all = 1" >> /etc/sysctl.conf
 
 sudo sysctl -p
 
-
 ##########################
 # WEB SERVER SETUP BELOW #
 ##########################
@@ -121,13 +109,11 @@ sudo chmod -R 555 /var/www/html
 sudo semanage fcontext -a -t httpd_sys_script_exec_t '/var/www/html(/.*)?'
 sudo restorecon -R -v /var/www/html/
 
-
 #############################
 # Remove the welcome screen #
 #############################
 
 sudo rm -f /etc/httpd/conf.d/welcome.conf
-
 
 #####################
 # Copy config files #
@@ -135,7 +121,6 @@ sudo rm -f /etc/httpd/conf.d/welcome.conf
 
 sudo cp ~/httpd.conf /etc/httpd/conf/
 sudo cp ~/ssl.conf /etc/httpd/conf.d/
-
 
 ##########################
 # Copy Certificate files #
@@ -158,12 +143,9 @@ sudo restorecon -RvF /etc/pki
 sudo firewall-cmd --permanent --add-port=443/tcp
 sudo firewall-cmd --reload
 
-
 ##############################################
 # Start the httpd service and enable at boot #
 ##############################################
 
 systemctl start httpd 
 systemctl enable httpd 
-
-
