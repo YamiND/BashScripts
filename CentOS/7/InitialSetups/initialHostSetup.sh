@@ -56,17 +56,32 @@ sudo firewall-cmd --reload
 
 sudo yum -y install kvm qemu-kvm python-virtinst libvirt libvirt-python libguestfs-tools virt-install
 
+##########################
+# Enabling KVM in Kernel #
+##########################
+
+sudo modprobe kvm
+sudo modprobe kvm_intel
+
 #####################
 # Enabling libvirtd #
 #####################
 
 sudo chkconfig libvirtd on
+sudo systemctl restart libvirtd
 
 ##########################
 # Enable IPv4 Forwarding #
 ##########################
 
 sudo echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+
+#######################
+# Enable KVM VNC Port #
+#######################
+
+firewall-cmd --zone=public --add-port=5900/tcp --permanent
+firewall-cmd --reload
 
 ########################
 # Disable ICMP Replies #
@@ -79,3 +94,9 @@ sudo echo "net.ipv4.icmp_echo_ignore_all = 1" >> /etc/sysctl.conf
 ######################
 
 sudo sysctl -p
+
+#########################################
+# Restart the system for kernel changes #
+#########################################
+
+sudo reboot
