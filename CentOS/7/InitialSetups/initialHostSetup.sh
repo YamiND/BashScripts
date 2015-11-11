@@ -12,7 +12,6 @@
 #########################
 
 sudo yum -y update
-sudo yum -y upgrade
 
 #######################
 # Enable Repositories # 
@@ -37,7 +36,7 @@ sudo yum -y install htop policycoreutils-python git wget
 ########################################
 
 sudo yum -y install openssh-server
-sudo cp /etc/ssh/sshd_config ~/sshd_config.backup
+cp /etc/ssh/sshd_config ~/sshd_config.backup
 sudo sed -i '/PermitRootLogin yes/c\PermitRootLogin no' /etc/ssh/sshd_config
 sudo sed -i '/#Port 25/c\Port 1069' /etc/ssh/sshd_config 
 
@@ -80,8 +79,8 @@ sudo echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
 # Enable KVM VNC Port #
 #######################
 
-firewall-cmd --zone=public --add-port=5900/tcp --permanent
-firewall-cmd --reload
+sudo firewall-cmd --zone=public --add-port=5900/tcp --permanent
+sudo firewall-cmd --reload
 
 ########################
 # Disable ICMP Replies #

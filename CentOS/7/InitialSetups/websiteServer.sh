@@ -23,7 +23,6 @@
 #########################
 
 sudo yum -y update
-sudo yum -y upgrade
 
 #######################
 # Enable Repositories # 
