@@ -24,7 +24,7 @@ sudo -y yum install epel-release
 # Install Basic Utilities #
 ###########################
 
-sudo yum -y install htop policycoreutils-python git
+sudo yum -y install htop policycoreutils-python git wget
 
 ########################################
 # Install OpenSSH Server and Configure #
