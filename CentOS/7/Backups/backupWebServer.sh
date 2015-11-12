@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 ####################################################
 # Please read:					   #
 # This script is designed to do a wordpress backup #
