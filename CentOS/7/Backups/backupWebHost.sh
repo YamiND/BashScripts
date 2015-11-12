@@ -16,7 +16,7 @@ wwwDirBackup=$tempDir/www
 mysqlBackup=$tempDir/sqlBackup.sql
 httpdConfigBackup=$tempDir/httpd.conf
 timeStamp=$(date +"%Y-%m-%d")
-backupArchive=~/backup$timeStamp.tar.gz
+backupArchive=~/lti_hosting_backup$timeStamp.tar.gz
 
 read -p "Do you want to send the backup file via SSH? [y/n] " sshTransfer
 read -p "What is the password to the root MySQL/MariaDB account? " dbPass
