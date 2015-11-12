@@ -93,6 +93,12 @@ git clone https://github.com/YamiND/LTI_Centric_v2.git
 
 sudo mv ./LTI_Centric_v2/* /var/www/html/
 
+####################
+# Remove empty dir #
+####################
+
+rm -rf ./LTI_Centric_v2
+
 #########################################
 # Change Ownerships and set Permissions #
 #########################################
