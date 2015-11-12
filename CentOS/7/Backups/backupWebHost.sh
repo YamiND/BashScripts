@@ -10,8 +10,6 @@
 
 mkdir ~/tempDir
 mkdir ~/tempDir/www
-mkdir ~/tempDir/mysql
-mkdir ~/tempDir/httpd
 
 tempDir=~/tempDir
 wwwDirBackup=$tempDir/www
