@@ -89,7 +89,7 @@ fi
 # Remove temporary Directory #
 ##############################
 
-rm -rf $tempDir
+sudo rm -rf $tempDir
 
 ###################
 # Echo completion #
