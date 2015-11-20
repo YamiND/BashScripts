@@ -45,28 +45,28 @@ echo "" >> $secureReport
 echo -e "Report for $getHostname \t Generated on $(date -u)" >> $secureReport
 echo "" >> $secureReport
 
-echo -e "\tUptime/CPU Statistics" >> $secureReport
+echo "Uptime/CPU Statistics" >> $secureReport
 echo "" >> $secureReport
-echo "$getUptime" >> $secureReport
-echo "" >> $secureReport
-
-echo -e "\tRAM Statistics" >> $secureReport
-echo "" >> $secureReport
-echo "$getUsedRAM" >> $secureReport
-echo "$getFreeRAM" >> $secureReport
+echo -e "\t$getUptime" >> $secureReport
 echo "" >> $secureReport
 
-echo -e "\tFilesystem Statistics" >> $secureReport
+echo "RAM Statistics" >> $secureReport
 echo "" >> $secureReport
-echo "$getFSUsage" >> $secureReport
+echo -e "\t$getUsedRAM" >> $secureReport
+echo -e "\t$getFreeRAM" >> $secureReport
 echo "" >> $secureReport
 
-echo -e "\tPeople who logged in Today" >> $secureReport
+echo "Filesystem Statistics" >> $secureReport
+echo "" >> $secureReport
+echo -e "\t$getFSUsage" >> $secureReport
+echo "" >> $secureReport
+
+echo "People who logged in Today" >> $secureReport
 echo "" >> $secureReport
 echo "$getTodayUsers" >> $secureReport
 echo "" >> $secureReport
 
-echo -e "\tAuthentication Logs" >> $secureReport
+echo "Authentication Logs" >> $secureReport
 echo "" >> $secureReport
 
 while read line;
