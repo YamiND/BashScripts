@@ -52,8 +52,8 @@ echo "" >> $secureReport
 
 echo "RAM Statistics" >> $secureReport
 echo "" >> $secureReport
-$getUsedRAM >> $secureReport
-$getFreeRAM >> $secureReport
+echo "$getUsedRAM" >> $secureReport
+echo "$getFreeRAM" >> $secureReport
 echo "" >> $secureReport
 
 echo "Filesystem Statistics" >> $secureReport
@@ -63,7 +63,7 @@ echo "" >> $secureReport
 
 echo "People who logged in Today" >> $secureReport
 echo "" >> $secureReport
-$getTodayUsers >> $secureReport
+echo "$getTodayUsers" >> $secureReport
 echo "" >> $secureReport
 
 echo "Authentication Logs" >> $secureReport
