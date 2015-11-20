@@ -12,8 +12,8 @@ secureFile=~/secureFile.txt
 secureReport=~/secureMatch.txt
 getUsedRAM=$(free -m | awk '/Mem/ {print $3 " MB Used"}')
 getFreeRAM=$(free -m | awk '/Mem/ {print $4 " MB Free"}')
-getHostname=$(echo hostname)
-getUptime=$(echo uptime)
+getHostname=$(hostname)
+getUptime=$(uptime)
 getTodayUsers=$(last | awk -v todayPattern="$todaysDate" '$0 ~ todayPattern {print $0}')
 getFSUsage=$(df -h | head -n 2)
 
