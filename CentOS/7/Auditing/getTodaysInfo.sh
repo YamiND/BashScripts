@@ -47,23 +47,23 @@ echo "" >> $secureReport
 
 echo "Uptime/CPU Statistics" >> $secureReport
 echo "" >> $secureReport
-echo "$getUptime" >> $secureReport
+echo -e "\t$getUptime" >> $secureReport
 echo "" >> $secureReport
 
 echo "RAM Statistics" >> $secureReport
 echo "" >> $secureReport
-echo "$getUsedRAM" >> $secureReport
-echo "$getFreeRAM" >> $secureReport
+echo -e "\t$getUsedRAM" >> $secureReport
+echo -e "\t$getFreeRAM" >> $secureReport
 echo "" >> $secureReport
 
 echo "Filesystem Statistics" >> $secureReport
 echo "" >> $secureReport
-echo $getFSUsage >> $secureReport
+echo -e "\t$getFSUsage" >> $secureReport
 echo "" >> $secureReport
 
 echo "People who logged in Today" >> $secureReport
 echo "" >> $secureReport
-echo "$getTodayUsers" >> $secureReport
+echo -e "\t$getTodayUsers" >> $secureReport
 echo "" >> $secureReport
 
 echo "Authentication Logs" >> $secureReport
