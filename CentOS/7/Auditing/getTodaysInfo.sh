@@ -39,35 +39,31 @@ done
 # Generate report that matches patterns #
 #########################################
 
-echo "Subject: Today's Report for $HOSTNAME" > $secureReport
+cat << EOF > $secureReport
+Subject: Today's Report for $HOSTNAME
 
-echo "" >> $secureReport
-echo -e "Report for $getHostname \t Generated on $(date -u)" >> $secureReport
-echo "" >> $secureReport
+Report for $getHostname		 Generated on $(date -u)
 
-echo "Uptime/CPU Statistics" >> $secureReport
-echo "" >> $secureReport
-echo -e "\t$getUptime" >> $secureReport
-echo "" >> $secureReport
+Uptime/CPU Statistics
 
-echo "RAM Statistics" >> $secureReport
-echo "" >> $secureReport
-echo -e "\t$getUsedRAM" >> $secureReport
-echo -e "\t$getFreeRAM" >> $secureReport
-echo "" >> $secureReport
+	$getUptime
 
-echo "Filesystem Statistics" >> $secureReport
-echo "" >> $secureReport
-echo -e "\t$getFSUsage" >> $secureReport
-echo "" >> $secureReport
+RAM Statistics
 
-echo "People who logged in Today" >> $secureReport
-echo "" >> $secureReport
-echo "$getTodayUsers" >> $secureReport
-echo "" >> $secureReport
+	$getUsedRAM
+	$getFreeRAM
 
-echo "Authentication Logs" >> $secureReport
-echo "" >> $secureReport
+Filesystem Statistics
+
+$getFSUsage
+
+People who logged in Today
+
+$getTodayUsers
+
+Authentication Logs
+
+EOF
 
 while read line;
 do
