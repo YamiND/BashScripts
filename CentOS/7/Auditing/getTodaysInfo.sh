@@ -67,9 +67,9 @@ EOF
 
 while read line;
 do
-	echo $line | cut -d " " -f5- | awk '/Accepted password/ {print $0}' >> $secureReport
-	echo $line | cut -d " " -f5- | awk '/Failed password/ {print $0}' >> $secureReport
-	echo $line | cut -d " " -f5- | awk '/not met by user/ {print $0}' >> $secureReport
+	echo $line | awk '/Accepted password/ {print $0}' >> $secureReport
+	echo $line | awk '/Failed password/ {print $0}' >> $secureReport
+	echo $line | awk '/not met by user/ {print $0}' >> $secureReport
 done < $secureFile
 
 #################################
