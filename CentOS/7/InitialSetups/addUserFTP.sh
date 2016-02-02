@@ -17,8 +17,8 @@ genpasswd()
 addUser()
 {
         randomPass=$(genpasswd 8) 
-	useradd -m $user
-	echo "$user:$randomPass" | chpasswd
+	useradd $username
+	echo "$username:randomPass" | chpasswd
 }
 
 checkFTP()
@@ -27,12 +27,12 @@ checkFTP()
 	oldSFTP="/usr/libexec/openssh/sftp-server"
 	newSFTP="internal-sftp"
 
-	if [ grep -q "$oldSFTP" "$sshConfig" ]  
+	if grep -q "$oldSFTP" "$sshConfig"   
 	then
 
-		sed -i "s/$oldSFTP/$newSFTP/g" "$sshConfig"
+		sed -i "s|$oldSFTP|$newSFTP|g" "$sshConfig"
 	
-	elif [ grep -q "$newSFTP" "$sshConfig" ] 
+	elif grep -q "$newSFTP" "$sshConfig"  
 	then
 
 		echo "SFTP Line already in $sshConfig"
@@ -42,23 +42,27 @@ checkFTP()
 		echo "Subsystem sftp internal-sftp" >> $sshConfig
 
 	fi
-
-	cat << EOF >> /etc/ssh/sshd_config
-
-        	Match Group sftpusers
-        	ChrootDirectory %h
-        	ForceCommand internal-sftp
-        	X11Forwarding no
-        	AllowTcpForwarding no
-
-        EOF
+	
+	if grep -q "sftpusers" "$sshConfig"
+	then
+	
+		echo "Entry already in $sshConfig"
+	else
+	
+	cat <<< ' 
+       	Match Group sftpusers
+       	ChrootDirectory %h
+       	ForceCommand internal-sftp
+       	X11Forwarding no
+       	AllowTcpForwarding no
+	' >> $sshConfig
+	fi
 }
 
-
-#	read -p "What would you like to call the username? " username
-#	addUser
-#	echo $randomPass
-
-	
 	checkFTP
+
+	read -p "What would you like to call the username? " username
+	addUser
+	echo "The username is $username and the password is $randomPass"
+	
 
