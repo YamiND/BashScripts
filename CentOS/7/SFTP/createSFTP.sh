@@ -44,6 +44,7 @@ Match Group sftpusers
 }
 
         checkFTP
+
 	mkdir /sftp
 	groupadd sftpusers
-
+	systemctl restart sshd
