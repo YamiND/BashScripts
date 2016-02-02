@@ -19,7 +19,7 @@ addUser()
 {
         randomPass=$(genpasswd 8) 
 	useradd $username
-	echo "$username:randomPass" | chpasswd
+	echo "$username:$randomPass" | chpasswd
 	
 	mkdir -p $chrootDir/$username/incoming
 	chown $username:sftpusers $chrootDir/$username/incoming
