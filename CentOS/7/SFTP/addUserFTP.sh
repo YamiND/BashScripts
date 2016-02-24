@@ -30,13 +30,13 @@ Match User $username
 	useradd $username
 	echo "$username:$randomPass" | chpasswd
 	
-	mkdir -p $chrootDir/$username/incoming
+	mkdir -p $chrootDir/$username/share
 	chmod 755 $chrootDir/$username 
 
-	chown $username:sftpusers $chrootDir/$username/incoming
-	chmod 755 $chrootDir/$username/incoming
+	chown $username:sftpusers $chrootDir/$username/share
+	chmod 775 $chrootDir/$username/share
 
-	usermod -aG sftpusers -d $chrootDir/$username/incoming -s /sbin/nologin $username
+	usermod -aG sftpusers -d $chrootDir/$username/share -s /sbin/nologin $username
 	rm -rf /home/$username
 }
 
