@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# Rip this out with client generation #
-serverIP=$( ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
-ovpnPort="1194"
-###############################
+# TODO Add SSL Layer to further obfuscate from GFW
 
 ovpnConfigDir="/etc/openvpn"
 easyRSADir="$ovpnConfigDir/easy-rsa"
@@ -29,6 +26,7 @@ yum install epel-release openvpn easy-rsa -y
 ###############################################
 # Copy sample server config to $ovpnConfigDir #
 ###############################################
+
 cp /usr/share/doc/openvpn-*/sample/sample-config-files/server.conf $ovpnConfigDir
 
 ################################################
@@ -78,26 +76,27 @@ cp $easyRSADir/openssl-1.0.0.cnf $easyRSADir/openssl.cnf
 # Load in new certificate variables and clean up #
 ##################################################
 
-source $rsaVarConfig
-$easyRSADir/clean-all
+cd $easyRSADir
+source ./vars
+./clean-all
 
 ############################################
 # Generate the Certificate Authority Certs #
 ############################################
 
-$rsaVarConfig/pkitool --initca
+$easyRSADir/pkitool --initca
 
 ################################
 # Fuck it, we're using pkitool #
 ################################
 
-$rsaVarConfig/pkitool --server  $serverName
+$easyRSADir/pkitool --server  $serverName
 
 ##########################################
 # Build Diffie-Hellman key exchange file #
 ##########################################
 
-$rsaVarConfig/build-dh
+$easyRSADir/build-dh
 
 ############################################
 # Copy keys and *.crts into $ovpnConfigDir #
@@ -151,47 +150,4 @@ systemctl restart network.service
 
 systemctl -f enable openvpn@server.service
 systemctl start openvpn@server.service
-
-
-##########################################################
-# At this point the OpenVPN Server should be running     #
-# I am going to include client generation in this script #
-# for now and rip it out and make it separate later      #
-##########################################################
-
-#################################
-# Generate sample client config #
-#################################
-
-clientCert="$ovpnKeyDir/client.crt"
-clientKey="$ovpnKeyDir/client.key"
-caCert="$ovpnKeyDir/ca.crt"
-
-$easyRSADir/pkitool client
-
-cat > ~/client.ovpn << EOF  
-client
-dev tun
-proto udp
-remote $serverIP $ovpnPort
-resolv-retry infinite
-nobind
-persist-key
-persist-tun
-comp-lzo
-verb 3
-
-<ca>
-$(cat $caCert)
-</ca>
-
-<cert>
-$(cat $clientCert)
-</cert>
-
-<key>
-$(cat $clientKey)
-</key>
-EOF
-
 
