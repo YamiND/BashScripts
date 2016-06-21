@@ -43,7 +43,7 @@ fi
 # Make sure client doesn't exist  #
 ###################################
 
-if [ -f $OPENVPN_KEYS/$client.crt ]
+if [ -f $ovpnKeyDir/$client.crt ]
 then 
 	echo "Client $client already exists!"
 	exit
