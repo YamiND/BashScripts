@@ -55,7 +55,6 @@ fi
 
 clientCert="$ovpnKeyDir/$client.crt"
 clientKey="$ovpnKeyDir/$client.key"
-clientOut="~/$client.ovpn"
 
 ####################
 # Replace Name Var #
@@ -90,7 +89,7 @@ else
 	ovpnComp=""
 fi
 
-cat > $clientOut << EOF  
+cat > ~/$client.ovpn << EOF  
 client
 dev $ovpnDev
 proto $ovpnProto
@@ -115,4 +114,4 @@ $(cat $clientKey)
 </key>
 EOF
 
-echo "Client $client generated. File located at $clientOut"
+echo "Client $client generated. File located at ~/$client.ovpn"
