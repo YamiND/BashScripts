@@ -79,10 +79,10 @@ source ./vars
 ###################
 # .OVPN Variables #
 ###################
-ovpnPort="cat $ovpnServerConf | grep "^[^#;]" | grep "port"  | cut -d ' ' -f2"
+ovpnPort=$(cat $ovpnServerConf | grep "^[^#;]" | grep "port"  | cut -d ' ' -f2)
 serverIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
-ovpnDev="cat $ovpnServerConf | grep "^[^#;]" | grep "dev" | cut -d ' ' -f2"
-ovpnProto="cat $ovpnServerConf | grep "^[^#;]" | grep "proto" | cut -d ' ' -f2"
+ovpnDev=$(cat $ovpnServerConf | grep "^[^#;]" | grep "dev" | cut -d ' ' -f2)
+ovpnProto=$(cat $ovpnServerConf | grep "^[^#;]" | grep "proto" | cut -d ' ' -f2)
 
 if [ -z $(cat $ovpnServerConf | grep "^[^#;]" | grep "comp-lzo") ]; then
 	ovpnComp="comp-lzo"
