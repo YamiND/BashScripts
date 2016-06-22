@@ -83,12 +83,6 @@ serverIP=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
 ovpnDev=$(cat $ovpnServerConf | grep "^[^#;]" | grep "dev" | cut -d ' ' -f2)
 ovpnProto=$(cat $ovpnServerConf | grep "^[^#;]" | grep "proto" | cut -d ' ' -f2)
 
-if [ -z $(cat $ovpnServerConf | grep "^[^#;]" | grep "comp-lzo") ]; then
-	ovpnComp="comp-lzo"
-else
-	ovpnComp=""
-fi
-
 cat > ~/$client.ovpn << EOF  
 client
 dev $ovpnDev
@@ -98,7 +92,7 @@ resolv-retry infinite
 nobind
 persist-key
 persist-tun
-$ovpnComp
+comp-lzo
 verb 3
 
 <ca>
