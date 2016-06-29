@@ -17,11 +17,30 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+
+####################
+# DNS Server Input #
+####################
+
+read -p "Enter DNS Server 1 (Google is 8.8.8.8): " dnsServer1
+read -p "Enter DNS Server 2 (Google 2 is 8.8.8.4): " dnsServer2
+
+####################
+# Get Cert Details #
+####################
+
+read -p "Enter the Province/State: " keyProvince
+read -p "Enter the City: " keyCity
+read -p "Enter the Organization Name: " keyOrg
+read -p "Enter the Admin Email: " keyEmail
+read -p "Enter the OU: " keyOu
+read -p "Enter the Common Name: " keyCn
+
 #########################################
 # Install packages required for OpenVPN #
 #########################################
 
-yum install epel-release openvpn easy-rsa -y
+yum install -y epel-release openvpn easy-rsa 
 
 ###############################################
 # Copy sample server config to $ovpnConfigDir #
@@ -34,13 +53,10 @@ cp /usr/share/doc/openvpn-*/sample/sample-config-files/server.conf $ovpnConfigDi
 ################################################
 
 sed -i 's/;push "redirect-gateway def1 bypass-dhcp"/push "redirect-gateway def1 bypass-dhcp"/g' $ovpnServerConf 
-
-sed -i 's/;push "dhcp-option DNS 208.67.222.222"/push "dhcp-option DNS 8.8.8.8"/g' $ovpnServerConf 
-sed -i 's/;push "dhcp-option DNS 208.67.220.220"/push "dhcp-option DNS 8.8.8.4"/g' $ovpnServerConf 
-
+sed -i "s/;push \"dhcp-option DNS 208.67.222.222\"/push \"dhcp-option DNS $dnsServer1\"/g" $ovpnServerConf 
+sed -i "s/;push \"dhcp-option DNS 208.67.220.220\"/push \"dhcp-option DNS $dnsServer2\"/g" $ovpnServerConf 
 sed -i 's/;user nobody/user nobody/g' $ovpnServerConf
 sed -i 's/;group nobody/group nobody/g' $ovpnServerConf
-
 sed -i 's/;duplicate-cn/duplicate-cn/g' $ovpnServerConf
 
 ##################################
@@ -59,13 +75,12 @@ cp -rf $sampleRSADir/* $easyRSADir
 # Modify Certificate values in $rsaVarConfig #
 ##############################################
 
-sed -i 's/export KEY_PROVINCE="CA"/export KEY_PROVINCE="MI"/g' $rsaVarConfig
-sed -i 's/export KEY_CITY="SanFrancisco"/export KEY_CITY="Sault Ste Marie"/g' $rsaVarConfig
-sed -i 's/export KEY_ORG="Fort-Funston"/export KEY_ORG="LTI"/g' $rsaVarConfig
-sed -i 's/export KEY_EMAIL="me@myhost.mydomain"/export KEY_EMAIL="tpostma@lakertech.com"/g' $rsaVarConfig
-sed -i 's/export KEY_OU="MyOrganizationalUnit"/export KEY_OU="IT"/g' $rsaVarConfig
-
-sed -i 's/# export KEY_CN="CommonName"/export KEY_CN="openvpn.lakertech.com"/g' $rsaVarConfig
+sed -i "s/export KEY_PROVINCE=\"CA\"/export KEY_PROVINCE=\"$keyProvince\"/g" $rsaVarConfig
+sed -i "s/export KEY_CITY=\"SanFrancisco\"/export KEY_CITY=\"$keyCity\"/g" $rsaVarConfig
+sed -i "s/export KEY_ORG=\"Fort-Funston\"/export KEY_ORG=\"$keyOrg\"/g" $rsaVarConfig
+sed -i "s/export KEY_EMAIL=\"me@myhost.mydomain\"/export KEY_EMAIL=\"$keyEmail\"/g" $rsaVarConfig
+sed -i "s/export KEY_OU=\"MyOrganizationalUnit\"/export KEY_OU=\"$keyOu\"/g" $rsaVarConfig
+sed -i "s/# export KEY_CN=\"CommonName\"/export KEY_CN=\"$keyCn\"/g" $rsaVarConfig
 
 ############################################
 # Fix OpenSSL not being detected by rename #
@@ -134,13 +149,13 @@ if grep -Fxq "net.ipv4.ip_forward = 1" $sysctlConfig
 then
 	echo "IPv4 forwarding already enabled"
 else
-	# This is where I break shit
+	# This is where I break shit (...and NOT test it)
 	sed -i '1i net.ipv4.ip_forward = 1' $sysctlConfig
 fi
 
-################################################
-# This is where I fucking break the networking #
-################################################
+#########################################################
+# This is where the networking breaks and I lose SSH... #
+#########################################################
 
 systemctl restart network.service
 
