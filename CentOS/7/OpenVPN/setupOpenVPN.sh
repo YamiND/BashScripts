@@ -40,7 +40,10 @@ read -p "Enter the Common Name: " keyCn
 # Install packages required for OpenVPN #
 #########################################
 
-yum install -y epel-release openvpn easy-rsa 
+yum install -y epel-release 
+yum install -y openvpn 
+yum install -y easy-rsa 
+yum install iptables-services -y
 
 ###############################################
 # Copy sample server config to $ovpnConfigDir #
@@ -124,7 +127,6 @@ cp dh2048.pem ca.crt server.crt server.key $ovpnConfigDir
 # Install iptables and disable firewallD # 
 ##########################################
 
-yum install iptables-services -y
 
 systemctl mask firewalld
 systemctl enable iptables
