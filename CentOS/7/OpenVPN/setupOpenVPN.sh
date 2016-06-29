@@ -4,7 +4,7 @@
 
 ovpnConfigDir="/etc/openvpn"
 easyRSADir="$ovpnConfigDir/easy-rsa"
-ovpnServerConf="$ovpnConfigDir/server.conf"
+ovpnServerConfig="$ovpnConfigDir/server.conf"
 ovpnKeyDir="$easyRSADir/keys"
 sampleRSADir="/usr/share/easy-rsa/2.0"
 rsaVarConfig="$easyRSADir/vars"
@@ -63,12 +63,12 @@ cp $ovpnSampleConfig $ovpnConfigDir
 # Modify $ovpnServerConf file with our changes #
 ################################################
 
-sed -i 's/;push "redirect-gateway def1 bypass-dhcp"/push "redirect-gateway def1 bypass-dhcp"/g' $ovpnServerConf 
-sed -i "s/;push \"dhcp-option DNS 208.67.222.222\"/push \"dhcp-option DNS $dnsServer1\"/g" $ovpnServerConf 
-sed -i "s/;push \"dhcp-option DNS 208.67.220.220\"/push \"dhcp-option DNS $dnsServer2\"/g" $ovpnServerConf 
-sed -i 's/;user nobody/user nobody/g' $ovpnServerConf
-sed -i 's/;group nobody/group nobody/g' $ovpnServerConf
-sed -i 's/;duplicate-cn/duplicate-cn/g' $ovpnServerConf
+sed -i "s/;push \"redirect-gateway def1 bypass-dhcp\"/push \"redirect-gateway def1 bypass-dhcp\"/g" $ovpnServerConfig
+sed -i "s/;push \"dhcp-option DNS 208.67.222.222\"/push \"dhcp-option DNS $dnsServer1\"/g" $ovpnServerConfig
+sed -i "s/;push \"dhcp-option DNS 208.67.220.220\"/push \"dhcp-option DNS $dnsServer2\"/g" $ovpnServerConfig
+sed -i "s/;user nobody/user nobody/g" $ovpnServerConfig
+sed -i "s/;group nobody/group nobody/g" $ovpnServerConfig
+sed -i "s/;duplicate-cn/duplicate-cn/g" $ovpnServerConfig
 
 ##################################
 # Create directory to store keys #
