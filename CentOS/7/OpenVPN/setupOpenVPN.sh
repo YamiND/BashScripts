@@ -9,21 +9,28 @@ ovpnKeyDir="$easyRSADir/keys"
 sampleRSADir="/usr/share/easy-rsa/2.0"
 rsaVarConfig="$easyRSADir/vars"
 serverName="server"
-routingInterface="eth0"
 sysctlConfig="/etc/sysctl.conf"
+ovpnSampleConfig="/usr/share/doc/$(ls /usr/share/doc/ | grep "openvpn")/sample/sample-config-files/server.conf"
 
 if [[ $EUID -ne 0 ]]; then
   echo "You must be a root user or run with sudo" 2>&1
   exit 1
 fi
 
+#############################
+# Ask for routing interface #
+#############################
+
+ls /sys/class/net
+
+read -p "What is the network interface you wish to server traffic on? " routingInterface
 
 ####################
 # DNS Server Input #
 ####################
 
 read -p "Enter DNS Server 1 (Google is 8.8.8.8): " dnsServer1
-read -p "Enter DNS Server 2 (Google 2 is 8.8.8.4): " dnsServer2
+read -p "Enter DNS Server 2 (Google 2 is 8.8.4.4): " dnsServer2
 
 ####################
 # Get Cert Details #
@@ -38,18 +45,19 @@ read -p "Enter the Common Name: " keyCn
 
 #########################################
 # Install packages required for OpenVPN #
+# I don't understand multi-yum reqs     #
 #########################################
 
 yum install -y epel-release 
 yum install -y openvpn 
 yum install -y easy-rsa 
-yum install iptables-services -y
+yum install -y iptables-services 
 
 ###############################################
 # Copy sample server config to $ovpnConfigDir #
 ###############################################
 
-cp /usr/share/doc/openvpn-*/sample/sample-config-files/server.conf $ovpnConfigDir
+cp $ovpnSampleConfig $ovpnConfigDir
 
 ################################################
 # Modify $ovpnServerConf file with our changes #
@@ -88,6 +96,7 @@ sed -i "s/# export KEY_CN=\"CommonName\"/export KEY_CN=\"$keyCn\"/g" $rsaVarConf
 ############################################
 # Fix OpenSSL not being detected by rename #
 ############################################
+
 cp $easyRSADir/openssl-1.0.0.cnf $easyRSADir/openssl.cnf
 
 ##################################################
@@ -104,9 +113,9 @@ source ./vars
 
 $easyRSADir/pkitool --initca
 
-################################
-# Fuck it, we're using pkitool #
-################################
+############################
+# Generate server cert/key #
+############################
 
 $easyRSADir/pkitool --server  $serverName
 
@@ -123,14 +132,11 @@ $easyRSADir/build-dh
 cd $ovpnKeyDir
 cp dh2048.pem ca.crt server.crt server.key $ovpnConfigDir
 
-##########################################
-# Install iptables and disable firewallD # 
-##########################################
+################################
+# Install and enable iptables  # 
+################################
 
-
-systemctl mask firewalld
 systemctl enable iptables
-systemctl stop firewalld
 systemctl start iptables
 
 iptables --flush
@@ -140,7 +146,6 @@ iptables --flush
 ##########################################
 
 iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o $routingInterface -j MASQUERADE
-
 iptables-save > /etc/sysconfig/iptables
 
 ##########################
@@ -151,13 +156,12 @@ if grep -Fxq "net.ipv4.ip_forward = 1" $sysctlConfig
 then
 	echo "IPv4 forwarding already enabled"
 else
-	# This is where I break shit (...and NOT test it)
 	sed -i '1i net.ipv4.ip_forward = 1' $sysctlConfig
 fi
 
-#########################################################
-# This is where the networking breaks and I lose SSH... #
-#########################################################
+###################################################
+# Restart networking for iptables to take effect  #
+###################################################
 
 systemctl restart network.service
 
@@ -167,4 +171,3 @@ systemctl restart network.service
 
 systemctl -f enable openvpn@server.service
 systemctl start openvpn@server.service
-
