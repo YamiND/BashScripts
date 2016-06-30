@@ -10,7 +10,6 @@ sampleRSADir="/usr/share/easy-rsa/2.0"
 rsaVarConfig="$easyRSADir/vars"
 serverName="server"
 sysctlConfig="/etc/sysctl.conf"
-ovpnSampleConfig="/usr/share/doc/$(ls /usr/share/doc/ | grep "openvpn")/sample/sample-config-files/server.conf"
 
 if [[ $EUID -ne 0 ]]; then
   echo "You must be a root user or run with sudo" 2>&1
@@ -57,6 +56,7 @@ yum install -y iptables-services
 # Copy sample server config to $ovpnConfigDir #
 ###############################################
 
+ovpnSampleConfig="/usr/share/doc/$(ls /usr/share/doc/ | grep "openvpn")/sample/sample-config-files/server.conf"
 cp $ovpnSampleConfig $ovpnConfigDir
 
 ################################################
@@ -130,7 +130,7 @@ $easyRSADir/build-dh
 ############################################
 
 cd $ovpnKeyDir
-cp dh2048.pem ca.crt server.crt server.key $ovpnConfigDir
+cp dh2048.pem ca.crt server.crt server.key $ovpnConfigDir/
 
 ################################
 # Install and enable iptables  # 
