@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# TODO Add SSL Layer to further obfuscate from GFW
+if [[ $EUID -ne 0 ]]; then
+  echo "You must be a root user or run with sudo" 2>&1
+  exit 1
+fi
 
 ovpnConfigDir="/etc/openvpn"
 easyRSADir="$ovpnConfigDir/easy-rsa"
@@ -10,11 +13,6 @@ sampleRSADir="/usr/share/easy-rsa/2.0"
 rsaVarConfig="$easyRSADir/vars"
 serverName="server"
 sysctlConfig="/etc/sysctl.conf"
-
-if [[ $EUID -ne 0 ]]; then
-  echo "You must be a root user or run with sudo" 2>&1
-  exit 1
-fi
 
 #############################
 # Ask for routing interface #
