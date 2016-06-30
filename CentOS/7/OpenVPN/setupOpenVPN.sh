@@ -29,8 +29,8 @@ read -p "What is the network interface you wish to server traffic on? " routingI
 # DNS Server Input #
 ####################
 
-read -p "Enter DNS Server 1 (Google is 8.8.8.8): " dnsServer1
-read -p "Enter DNS Server 2 (Google 2 is 8.8.4.4): " dnsServer2
+read -p "Enter DNS Server 1 (Google is 8.8.8.8): " dnsServerPrim
+read -p "Enter DNS Server 2 (Google 2 is 8.8.4.4): " dnsServerSecon
 
 ####################
 # Get Cert Details #
@@ -64,8 +64,8 @@ cp $ovpnSampleConfig $ovpnConfigDir
 ################################################
 
 sed -i "s/;push \"redirect-gateway def1 bypass-dhcp\"/push \"redirect-gateway def1 bypass-dhcp\"/g" $ovpnServerConfig
-sed -i "s/;push \"dhcp-option DNS 208.67.222.222\"/push \"dhcp-option DNS $dnsServer1\"/g" $ovpnServerConfig
-sed -i "s/;push \"dhcp-option DNS 208.67.220.220\"/push \"dhcp-option DNS $dnsServer2\"/g" $ovpnServerConfig
+sed -i "s/;push \"dhcp-option DNS 208.67.222.222\"/push \"dhcp-option DNS $dnsServerPrim\"/g" $ovpnServerConfig
+sed -i "s/;push \"dhcp-option DNS 208.67.220.220\"/push \"dhcp-option DNS $dnsServerSecon\"/g" $ovpnServerConfig
 sed -i "s/;user nobody/user nobody/g" $ovpnServerConfig
 sed -i "s/;group nobody/group nobody/g" $ovpnServerConfig
 sed -i "s/;duplicate-cn/duplicate-cn/g" $ovpnServerConfig
