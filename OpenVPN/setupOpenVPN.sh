@@ -1,8 +1,12 @@
 #!/bin/bash
 
+###########################
+# Require running as root #
+###########################
+
 if [[ $EUID -ne 0 ]]; then
-  echo "You must be a root user or run with sudo" 2>&1
-  exit 1
+ 	echo "You must be a root user or run with sudo" 2>&1
+ 	exit 1
 fi
 
 ##########################
@@ -16,26 +20,6 @@ elif [ -f /etc/redhat-release ]; then
 elif [ -f /etc/debian_version ]; then
 	OS=Debian # What the crap Debian
 fi
-
-#####################################
-# OpenVPN Variables and directories #
-#####################################
-
-ovpnConfigDir="/etc/openvpn"
-easyRSADir="$ovpnConfigDir/easy-rsa"
-ovpnServerConfig="$ovpnConfigDir/server.conf"
-ovpnKeyDir="$easyRSADir/keys"
-
-if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
-	sampleRSADir="/usr/share/easy-rsa/2.0"
-elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
-	sampleRSADir="/usr/share/easy-rsa"
-	mkdir -p $easyRSADir
-fi
-
-rsaVarConfig="$easyRSADir/vars"
-serverName="server"
-sysctlConfig="/etc/sysctl.conf"
 
 #############################
 # Ask for routing interface #
@@ -52,9 +36,9 @@ read -p "What is the network interface you wish to server traffic on? " routingI
 read -p "Enter DNS Server 1 (Google is 8.8.8.8): " dnsServerPrim
 read -p "Enter DNS Server 2 (Google 2 is 8.8.4.4): " dnsServerSecon
 
-####################
-# Get Cert Details #
-####################
+###########################
+# Get Certificate Details #
+###########################
 
 read -p "Enter the Province/State: " keyProvince
 read -p "Enter the City: " keyCity
@@ -63,35 +47,44 @@ read -p "Enter the Admin Email: " keyEmail
 read -p "Enter the OU: " keyOu
 read -p "Enter the Common Name: " keyCn
 
+#####################################
+# OpenVPN Variables and directories #
+#####################################
+
+ovpnConfigDir="/etc/openvpn"
+easyRSADir="$ovpnConfigDir/easy-rsa"
+ovpnServerConfig="$ovpnConfigDir/server.conf"
+ovpnKeyDir="$easyRSADir/keys"
+sampleRSADir="/usr/share/easy-rsa/2.0"
+
+rsaVarConfig="$easyRSADir/vars"
+serverName="server"
+sysctlConfig="/etc/sysctl.conf"
+
 #########################################
 # Install packages required for OpenVPN #
 # I don't understand multi-yum reqs     #
 #########################################
 
-if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
+if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat"]; then
 	yum install -y epel-release 
 	yum install -y openvpn 
 	yum install -y easy-rsa 
 	yum install -y iptables-services 
-elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
-	# Let's pretend Debian and Ubuntu work the same
-	# openvpn gets the easy-rsa package
-
-	apt-get install -y openvpn easy-rsa
-
+elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then	
+	apt-get install -y openvpn easy-rsa 
 fi
+
 ###############################################
 # Copy sample server config to $ovpnConfigDir #
+# Create easy-rsa directory on Ubuntu/Debian  #
 ###############################################
 
 if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
 	ovpnSampleConfig="/usr/share/doc/$(ls /usr/share/doc/ | grep "openvpn")/sample/sample-config-files/server.conf"
 elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
-	# Why do they compress the server.conf?????
 	gunzip /usr/share/doc/$(ls /usr/share/doc/ | grep "openvpn")/examples/sample-config-files/server.conf.gz
-
 	ovpnSampleConfig="/usr/share/doc/$(ls /usr/share/doc/ | grep "openvpn")/examples/sample-config-files/server.conf"
-
 fi
 
 cp $ovpnSampleConfig $ovpnConfigDir
@@ -107,17 +100,21 @@ sed -i "s/;user nobody/user nobody/g" $ovpnServerConfig
 sed -i "s/;group nobody/group nobody/g" $ovpnServerConfig
 sed -i "s/;duplicate-cn/duplicate-cn/g" $ovpnServerConfig
 
+#######################################
+# Copy easyRSA samples to $easyRSADir #
+#######################################
+
+if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
+	cp -rf $sampleRSADir/* $easyRSADir 
+elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
+	make-cadir $easyRSADir
+fi
+
 ##################################
 # Create directory to store keys #
 ##################################
 
 mkdir -p $ovpnKeyDir 
-
-#######################################
-# Copy easyRSA samples to $easyRSADir #
-#######################################
-
-cp -rf $sampleRSADir/* $easyRSADir 
 
 ##############################################
 # Modify Certificate values in $rsaVarConfig #
@@ -189,7 +186,7 @@ iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o $routingInterface -j MASQUERADE
 if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
 	iptables-save > /etc/sysconfig/iptables
 elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
-	iptables-save > /etc/network/iptables
+	iptables-save > ~/iptables
 fi
 
 ##########################
@@ -202,6 +199,12 @@ then
 else
 	sed -i '1i net.ipv4.ip_forward = 1' $sysctlConfig
 fi
+
+#################
+# Reload sysctl #
+#################
+
+sysctl -p 
 
 ###################################################
 # Restart networking for iptables to take effect  #
@@ -221,6 +224,6 @@ if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
 	systemctl -f enable openvpn@server.service
 	systemctl start openvpn@server.service
 elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
-	systemctl -f enable openvpn
-	systemctl start openvpn
+	systemctl -f enable OpenVPN
+	systemctl start openvpn 
 fi
