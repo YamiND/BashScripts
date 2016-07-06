@@ -5,11 +5,34 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+##########################
+# Determine Distribution #
+##########################
+
+if [ -f /etc/lsb-release ]; then
+    OS=$(cat /etc/lsb-release | grep DISTRIB_ID | cut -d'=' -f2)
+elif [ -f /etc/redhat-release ]; then
+	OS=$(cat /etc/redhat-release | cut -f1 -d' ')
+elif [ -f /etc/debian_version ]; then
+	OS=Debian # What the crap Debian
+fi
+
+#####################################
+# OpenVPN Variables and directories #
+#####################################
+
 ovpnConfigDir="/etc/openvpn"
 easyRSADir="$ovpnConfigDir/easy-rsa"
 ovpnServerConfig="$ovpnConfigDir/server.conf"
 ovpnKeyDir="$easyRSADir/keys"
-sampleRSADir="/usr/share/easy-rsa/2.0"
+
+if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
+	sampleRSADir="/usr/share/easy-rsa/2.0"
+elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
+	sampleRSADir="/usr/share/easy-rsa"
+	mkdir -p $easyRSADir
+fi
+
 rsaVarConfig="$easyRSADir/vars"
 serverName="server"
 sysctlConfig="/etc/sysctl.conf"
@@ -45,16 +68,31 @@ read -p "Enter the Common Name: " keyCn
 # I don't understand multi-yum reqs     #
 #########################################
 
-yum install -y epel-release 
-yum install -y openvpn 
-yum install -y easy-rsa 
-yum install -y iptables-services 
+if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
+	yum install -y epel-release 
+	yum install -y openvpn 
+	yum install -y easy-rsa 
+	yum install -y iptables-services 
+elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
+	# Let's pretend Debian and Ubuntu work the same
+	# openvpn gets the easy-rsa package
 
+	apt-get install -y openvpn
+fi
 ###############################################
 # Copy sample server config to $ovpnConfigDir #
 ###############################################
 
-ovpnSampleConfig="/usr/share/doc/$(ls /usr/share/doc/ | grep "openvpn")/sample/sample-config-files/server.conf"
+if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
+	ovpnSampleConfig="/usr/share/doc/$(ls /usr/share/doc/ | grep "openvpn")/sample/sample-config-files/server.conf"
+elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
+	# Why do they compress the server.conf?????
+	gunzip /usr/share/doc/$(ls /usr/share/doc/ | grep "openvpn")/examples/sample-config-files/server.conf.gz
+
+	ovpnSampleConfig="/usr/share/doc/$(ls /usr/share/doc/ | grep "openvpn")/examples/sample-config-files/server.conf"
+
+fi
+
 cp $ovpnSampleConfig $ovpnConfigDir
 
 ################################################
@@ -134,8 +172,10 @@ cp dh2048.pem ca.crt server.crt server.key $ovpnConfigDir/
 # Install and enable iptables  # 
 ################################
 
-systemctl enable iptables
-systemctl start iptables
+if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
+	systemctl enable iptables
+	systemctl start iptables
+fi
 
 iptables --flush
 
@@ -144,7 +184,12 @@ iptables --flush
 ##########################################
 
 iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o $routingInterface -j MASQUERADE
-iptables-save > /etc/sysconfig/iptables
+
+if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
+	iptables-save > /etc/sysconfig/iptables
+elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
+	iptables-save > /etc/network/iptables
+fi
 
 ##########################
 # Enable IPv4 Forwarding #
@@ -161,7 +206,11 @@ fi
 # Restart networking for iptables to take effect  #
 ###################################################
 
-systemctl restart network.service
+if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
+	systemctl restart network.service
+elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
+	systemctl restart networking
+fi
 
 ###################################
 # Enable && Start OpenVPN Service #
