@@ -77,7 +77,8 @@ elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
 	# Let's pretend Debian and Ubuntu work the same
 	# openvpn gets the easy-rsa package
 
-	apt-get install -y openvpn
+	apt-get install -y openvpn easy-rsa
+
 fi
 ###############################################
 # Copy sample server config to $ovpnConfigDir #
@@ -216,5 +217,10 @@ fi
 # Enable && Start OpenVPN Service #
 ###################################
 
-systemctl -f enable openvpn@server.service
-systemctl start openvpn@server.service
+if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
+	systemctl -f enable openvpn@server.service
+	systemctl start openvpn@server.service
+elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
+	systemctl -f enable openvpn
+	systemctl start openvpn
+fi
