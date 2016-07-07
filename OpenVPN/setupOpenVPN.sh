@@ -233,6 +233,6 @@ if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
 	systemctl -f enable openvpn@server.service
 	systemctl start openvpn@server.service
 elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
-	systemctl -f enable OpenVPN
+	systemctl -f enable openvpn
 	systemctl start openvpn 
 fi
