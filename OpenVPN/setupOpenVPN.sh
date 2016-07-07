@@ -67,10 +67,7 @@ sysctlConfig="/etc/sysctl.conf"
 #########################################
 
 if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat"]; then
-	yum install -y epel-release 
-	yum install -y openvpn 
-	yum install -y easy-rsa 
-	yum install -y iptables-services 
+	yum -y install epel-release openvpn easy-rsa iptables-services 
 elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then	
 	apt-get install -y openvpn easy-rsa 
 fi
