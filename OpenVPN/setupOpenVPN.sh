@@ -66,7 +66,7 @@ sysctlConfig="/etc/sysctl.conf"
 # I don't understand multi-yum reqs     #
 #########################################
 
-if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat"]; then
+if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
 	yum -y install epel-release 
 	yum -y install openvpn 
 	yum -y install easy-rsa 
