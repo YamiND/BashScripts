@@ -147,7 +147,7 @@ source ./vars
 ########################################
 
 if [ "$OS" == "Ubuntu" ]; then
-	sed -i "s/KEY_ALTNAMES=\"$KEY_CN\"/KEY_ALTNAMES=\"DNS:${KEY_CN}\"/g" $easyRSADir/pkitool
+	sed -i 's/KEY_ALTNAMES="$KEY_CN"/KEY_ALTNAMES="DNS:${KEY_CN}"/g' $easyRSADir/pkitool
 fi 
 
 ############################################
