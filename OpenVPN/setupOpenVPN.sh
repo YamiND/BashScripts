@@ -67,7 +67,10 @@ sysctlConfig="/etc/sysctl.conf"
 #########################################
 
 if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat"]; then
-	yum -y install epel-release openvpn easy-rsa iptables-services 
+	yum -y install epel-release 
+	yum -y install openvpn 
+	yum -y install easy-rsa 
+	yum -y install iptables-services 
 elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then	
 	apt-get install -y openvpn easy-rsa 
 fi
@@ -102,6 +105,7 @@ sed -i "s/;duplicate-cn/duplicate-cn/g" $ovpnServerConfig
 #######################################
 
 if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
+	mkdir $easyRSADir
 	cp -rf $sampleRSADir/* $easyRSADir 
 elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
 	make-cadir $easyRSADir
