@@ -142,6 +142,14 @@ cd $easyRSADir
 source ./vars
 ./clean-all
 
+########################################
+# Fix pkitool on Ubuntu* distributions #
+########################################
+
+if [ "$OS" == "Ubuntu" ]; then
+	sed -i "s/KEY_ALTNAMES=\"$KEY_CN\"/KEY_ALTNAMES=\"DNS:${KEY_CN}\"/g" $easyRSADir/pkitool
+fi 
+
 ############################################
 # Generate the Certificate Authority Certs #
 ############################################
