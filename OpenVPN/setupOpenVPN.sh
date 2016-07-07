@@ -190,12 +190,28 @@ iptables --flush
 # Setup iptables routing and save config #
 ##########################################
 
-iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o $routingInterface -j MASQUERADE
 
 if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
+	iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o $routingInterface -j MASQUERADE
 	iptables-save > /etc/sysconfig/iptables
 elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
-	iptables-save > ~/iptables
+
+################################
+# Set up stupid UFW networking #
+################################
+
+sed -i "# Don't delete these required lines, otherwise there will be errors/i \ 
+*nat \
+:POSTROUTING ACCEPT [0:0] \
+-A POSTROUTING -s 10.8.0.0/8 -o $routingInterface -j MASQUERADE \
+COMMIT \ " /etc/ufw/before.rules
+
+sed -i "s/DEFAULT_FORWARD_POLICY=\"DROP\"/DEFAULT_FORWARD_POLICY=\"ACCEPT\"/g" /etc/default/ufw
+
+	ufw allow 1194/udp
+	ufw disable
+	ufw enable
+
 fi
 
 ##########################
@@ -233,6 +249,6 @@ if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
 	systemctl -f enable openvpn@server.service
 	systemctl start openvpn@server.service
 elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
-	systemctl -f enable openvpn
-	systemctl start openvpn 
+	systemctl -f enable openvpn@server
+	systemctl start openvpn@server
 fi
