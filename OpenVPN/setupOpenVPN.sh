@@ -14,7 +14,7 @@ fi
 ##########################
 
 if [ -f /etc/lsb-release ]; then
-    OS=$(cat /etc/lsb-release | grep DISTRIB_ID | cut -d'=' -f2)
+	OS=$(cat /etc/lsb-release | grep DISTRIB_ID | cut -d'=' -f2)
 elif [ -f /etc/redhat-release ]; then
 	OS=$(cat /etc/redhat-release | cut -f1 -d' ')
 elif [ -f /etc/debian_version ]; then
@@ -182,23 +182,25 @@ cp dh2048.pem ca.crt server.crt server.key $ovpnConfigDir/
 if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
 	systemctl enable iptables
 	systemctl start iptables
+	iptables --flush
 fi
-
-iptables --flush
 
 ##########################################
 # Setup iptables routing and save config #
 ##########################################
 
-
 if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
+
+	#################################
+	# Set up iptables rules for tun #
+	#################################
 	iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o $routingInterface -j MASQUERADE
 	iptables-save > /etc/sysconfig/iptables
 elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
 
-################################
-# Set up stupid UFW networking #
-################################
+	################################
+	# Set up stupid UFW networking #
+	################################
 
 sed -i '/# Don\x27t delete these required lines, otherwise there will be errors/i\
 \*nat\
@@ -211,7 +213,6 @@ sed -i "s/DEFAULT_FORWARD_POLICY=\"DROP\"/DEFAULT_FORWARD_POLICY=\"ACCEPT\"/g" /
 	ufw allow 1194/udp
 	ufw disable
 	ufw enable
-
 fi
 
 ##########################
