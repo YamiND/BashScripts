@@ -200,11 +200,11 @@ elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
 # Set up stupid UFW networking #
 ################################
 
-sed -i -e '/# Don\x27t delete these required lines, otherwise there will be errors/i \ 
-\*nat \ 
-:POSTROUTING ACCEPT \[0:0\] \ 
--A POSTROUTING -s 10\.8\.0\.0\/8 -o '"$routingInterface"' -j MASQUERADE \ 
-COMMIT ' /etc/ufw/before.rules
+sed -i '/# Don\x27t delete these required lines, otherwise there will be errors/i\
+\*nat\
+:POSTROUTING ACCEPT \[0:0\]\
+-A POSTROUTING -s 10\.8\.0\.0/8 -o '"$routingInterface"' -j MASQUERADE\
+COMMIT' /etc/ufw/before.rules
 
 sed -i "s/DEFAULT_FORWARD_POLICY=\"DROP\"/DEFAULT_FORWARD_POLICY=\"ACCEPT\"/g" /etc/default/ufw
 
