@@ -144,9 +144,10 @@ source ./vars
 
 ########################################
 # Fix pkitool on Ubuntu* distributions #
+# ....and maybe Debian                 #
 ########################################
 
-if [ "$OS" == "Ubuntu" ]; then
+if [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
 	sed -i 's/KEY_ALTNAMES="$KEY_CN"/KEY_ALTNAMES="DNS:${KEY_CN}"/g' $easyRSADir/pkitool
 fi 
 
@@ -196,7 +197,7 @@ if [ "$OS" == "CentOS" ] || [ "$OS" == "Red Hat" ]; then
 	#################################
 	iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o $routingInterface -j MASQUERADE
 	iptables-save > /etc/sysconfig/iptables
-elif [ "$OS" == "Ubuntu" ] || [ "$OS" == "Debian" ]; then
+elif [ "$OS" == "Ubuntu" ]; then
 
 	################################
 	# Set up stupid UFW networking #
