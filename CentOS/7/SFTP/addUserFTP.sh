@@ -8,7 +8,7 @@ fi
 
 cp /etc/ssh/sshd_config ~/
 chrootDir="/sftp"
-
+sshConfig="/etc/ssh/sshd_config"
 
 genpasswd() 
 {
@@ -17,14 +17,27 @@ genpasswd()
 
 addUser()
 {
+	echo -e "	
+Match User $username 
+        ChrootDirectory /sftp/%u
+        ForceCommand internal-sftp 
+        X11Forwarding no 
+        AllowTcpForwarding no 
+        " >> $sshConfig
+	systemctl restart sshd
+
         randomPass=$(genpasswd 8) 
 	useradd $username
 	echo "$username:$randomPass" | chpasswd
 	
-	mkdir -p $chrootDir/$username/incoming
-	chown $username:sftpusers $chrootDir/$username/incoming
+	mkdir -p $chrootDir/$username/share
+	chmod 755 $chrootDir/$username 
 
-	usermod -g sftpusers -d /incoming -s /sbin/nologin $username
+	chown $username:sftpusers $chrootDir/$username/share
+	chmod 775 $chrootDir/$username/share
+
+	usermod -aG sftpusers -d $chrootDir/$username/share -s /sbin/nologin $username
+	rm -rf /home/$username
 }
 
 

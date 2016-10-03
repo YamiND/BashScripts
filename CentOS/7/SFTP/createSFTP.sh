@@ -13,33 +13,19 @@ checkFTP()
 
         if grep -q "$oldSFTP" "$sshConfig"
         then
-
                 sed -i "s|$oldSFTP|$newSFTP|g" "$sshConfig"
-
         elif grep -q "$newSFTP" "$sshConfig"
         then
-
                 echo "SFTP Line already in $sshConfig"
-
         else
-
                 echo "Subsystem sftp internal-sftp" >> $sshConfig
-
         fi
 
         if grep -q "sftpusers" "$sshConfig"
         then
-
                 echo "Entry already in $sshConfig"
         else
 
-        cat <<< '
-Match Group sftpusers
-        ChrootDirectory /sftp/%u
-        ForceCommand internal-sftp
-        X11Forwarding no
-        AllowTcpForwarding no
-        ' >> $sshConfig
         fi
 }
 
