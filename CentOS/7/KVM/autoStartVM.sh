@@ -8,10 +8,9 @@ read -p "What is the name of the VM? " vmName
 
 case $autoChoice in
 	enable)
- 	sudo virsh autostart $vmName
-	;;
-
+ 	    sudo virsh autostart $vmName
+	    ;;
 	disable)
-	sudo virsh autostart --disable $vmName
-	;;
+	    sudo virsh autostart --disable $vmName
+	    ;;
 esac

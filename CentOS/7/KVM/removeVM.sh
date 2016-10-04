@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #############################################################
-# Please Read: 						    #
-#							    # 
+# Please Read: 						                        #
+#							                                # 
 # This script assumes the images are of the extension .img  #
-# This script will remove a VM and delete it		    #
+# This script will remove a VM and delete it		        #
 ############################################################# 
 
 sudo virsh list --all
