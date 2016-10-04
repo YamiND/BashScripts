@@ -1,0 +1,6 @@
+# WARNING: These scripts will disable VNC on any VMs you have and reboot the VMs
+# This is necessary for me to do my automation
+# These templates were created so that I could easy setup VMs on the fly with minimal interaction.
+# For this reason some settings are hardcoded
+# Until I figure out how to modify the ISO of a distro, some things may need to be manually
+# changed. These scripts assume the .ISO files are in your home directory of the user running this script

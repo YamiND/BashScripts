@@ -38,9 +38,9 @@ do
 	read -p "Is this information correct? [y/n] " vmInfo
 	
 	case $vmInfo in
-	y)
-	break
-	;;	
+	    y)
+	        break
+	        ;;	
 	esac
 	
 done
@@ -60,11 +60,9 @@ sudo virt-install \
 --network bridge:$vmNetwork
 
 case $vmAutoStart in
-
-	y)
-	virsh autostart $vmName
+    y)
+        sudo virsh autostart $vmName
 	;;
 esac
-
 
 echo "You can now access this VM by connecting to the server via VNC"
