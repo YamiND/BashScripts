@@ -10,9 +10,9 @@ sudo virsh list --all
 read -p "What do you want to call the VM? " vmName
 
 vmDescription="Ubuntu"
-vmISO=~/ubuntuServer.iso
-vmGeneric="ubuntu"
-vmOS="ubuntutrusty"
+vmISO=/var/ubuntuServer.iso
+vmGeneric="Linux"
+vmOS="ubuntu14.04"
 vmCPU="4"
 vmRAM="4096"
 vmSpace="30"
@@ -37,6 +37,8 @@ then
         fi
     done
     sudo systemctl restart libvirtd
+
+sleep 30 # Sleep 30 seconds
 fi
 
 # Install the VM
